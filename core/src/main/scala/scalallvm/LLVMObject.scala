@@ -15,8 +15,8 @@ trait LLVMObject {
   override def hashCode(): Int =
     handle.hashCode()
 
-  override def toString: String = {
-    val n = getClass.getSimpleName
+  override def toString(): String = {
+    val n = getClass.getName()
     s"${n}(${handle.toHexString})"
   }
 
