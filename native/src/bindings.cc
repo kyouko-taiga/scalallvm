@@ -47,8 +47,23 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleDescription(
   return e->NewStringUTF(result.c_str());
 }
 
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleGetName(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Module>(sh);
+  return e->NewStringUTF(self->getModuleIdentifier().c_str());
+}
+
 JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleDispose(
   JNIEnv*, jobject, jlong sh
 ) {
   delete as_pointer<llvm::Module>(sh);
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName(
+  JNIEnv* e, jobject, jlong sh, jstring name
+) {
+  auto* self = as_pointer<llvm::Module>(sh);
+  const char* n = e->GetStringUTFChars(name, NULL);
+  self->setModuleIdentifier(n);
 }

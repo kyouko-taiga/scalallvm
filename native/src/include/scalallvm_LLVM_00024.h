@@ -41,11 +41,27 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleDescription
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     ModuleGetName
+ * Signature:  (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleGetName
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ModuleDispose
  * Signature:  (J)V
  */
 JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleDispose
   (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ModuleSetName
+ * Signature:  (JLjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName
+  (JNIEnv *, jobject, jlong, jstring);
 
 #ifdef __cplusplus
 }

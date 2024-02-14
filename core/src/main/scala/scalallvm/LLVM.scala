@@ -17,6 +17,8 @@ object LLVM {
 
   @native def ModuleCreateWithNameInContext(name: String, context: Handle): Handle
   @native def ModuleDescription(self: Handle): String
+  @native def ModuleGetName(self: Handle): String
   @native def ModuleDispose(self: Handle)
+  @native def ModuleSetName(self: Handle, name: String)
 
 }
