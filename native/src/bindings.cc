@@ -94,6 +94,20 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext(
   return as_handle(llvm::IntegerType::get(*c, bit_width));
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_PointerTypeInContext(
+  JNIEnv*, jobject, jint space, jlong context_h
+) {
+  auto* c = as_pointer<llvm::LLVMContext>(context_h);
+  return as_handle(llvm::PointerType::get(*c, space));
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_PointerTypeGetAddressSpace(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::PointerType>(sh);
+  return self->getAddressSpace();
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_VoidTypeInContext(
   JNIEnv*, jobject, jlong context_h
 ) {

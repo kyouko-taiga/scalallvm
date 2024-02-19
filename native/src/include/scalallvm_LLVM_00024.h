@@ -73,6 +73,22 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     PointerTypeInContext
+ * Signature:  (IJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_PointerTypeInContext
+  (JNIEnv *, jobject, jint, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     PointerTypeGetGetAddressSpace
+ * Signature:  (J)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_PointerTypeGetAddressSpace
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     VoidTypeInContext
  * Signature:  (J)J
  */

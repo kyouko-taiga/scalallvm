@@ -24,6 +24,10 @@ object LLVM {
   // --- Types ----------------------------------------------------------------
 
   @native def IntTypeInContext(bitWidth: Int, context: Handle): Handle
+
+  @native def PointerTypeInContext(space: Int, context: Handle): Handle
+  @native def PointerTypeGetAddressSpace(self: Handle): Int
+
   @native def VoidTypeInContext(context: Handle): Handle
 
   // --- Values ---------------------------------------------------------------
