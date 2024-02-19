@@ -11,7 +11,9 @@ classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
 lazy val root = (project in file(".")).aggregate(core, native)
 
 lazy val core = project
-  .settings(javah / target := (native / nativeCompile / sourceDirectory).value / "include")
+  .settings(
+    javah / target := (native / nativeCompile / sourceDirectory).value / "include",
+    libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test)
   .dependsOn(native % Runtime) // remove this if `core` is a library, leave choice to end-user
 
 lazy val native = project
