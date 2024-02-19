@@ -21,4 +21,23 @@ object LLVM {
   @native def ModuleDispose(self: Handle)
   @native def ModuleSetName(self: Handle, name: String)
 
+  // --- Types ----------------------------------------------------------------
+
+  @native def IntTypeInContext(bitWidth: Int, context: Handle): Handle
+
+  // --- Values ---------------------------------------------------------------
+
+  @native def ValueDescription(self: Handle, isForDebug: Boolean): String
+  @native def ValueGetType(self: Handle): Handle
+
+  @native def ConstantNullValue(tpe: Handle): Handle
+
+  @native def ConstantIntCreate(tpe: Handle, value: Long, signed: Boolean): Handle
+  @native def ConstantIntCreateWide(
+    context: Handle, bitWidth: Int, words: Array[Long], signed: Boolean): Handle
+  @native def ConstantIntGetSExtValue(tpe: Handle): Long
+  @native def ConstantIntGetZExtValue(tpe: Handle): Long
+
+  // --- Support --------------------------------------------------------------
+
 }

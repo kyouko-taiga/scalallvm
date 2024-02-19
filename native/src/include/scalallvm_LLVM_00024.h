@@ -63,6 +63,70 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleDispose
 JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName
   (JNIEnv *, jobject, jlong, jstring);
 
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     IntTypeInContext
+ * Signature:  (IJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext
+  (JNIEnv *, jobject, jint, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ValueDescription
+ * Signature:  (JZ)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ValueDescription
+  (JNIEnv *, jobject, jlong, jboolean);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ValueGetType
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ValueGetType
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantNullValue
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantNullValue
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantIntCreate
+ * Signature:  (JJZ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantIntCreate
+  (JNIEnv *, jobject, jlong, jlong, jboolean);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantIntCreateWide
+ * Signature:  (JI[JZ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantIntCreateWide
+  (JNIEnv *, jobject, jlong, jint, jlongArray, jboolean);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantIntGetSExtValue
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantIntGetSExtValue
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantIntGetZExtValue
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantIntGetZExtValue
+  (JNIEnv *, jobject, jlong);
+
 #ifdef __cplusplus
 }
 #endif
