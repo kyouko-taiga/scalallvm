@@ -17,6 +17,9 @@ final class Context private (val handle: LLVM.Handle) extends LLVMObject with Di
     try action(instance) finally instance.dispose()
   }
 
+  /** LLVM's `void` type. */
+  def void = new types.Void(this)
+
   /** LLVM's `i1` type. */
   def i1 = new types.Integer(1, this)
 

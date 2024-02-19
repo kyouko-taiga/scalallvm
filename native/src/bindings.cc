@@ -94,6 +94,13 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext(
   return as_handle(llvm::IntegerType::get(*c, bit_width));
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_VoidTypeInContext(
+  JNIEnv*, jobject, jlong context_h
+) {
+  auto* c = as_pointer<llvm::LLVMContext>(context_h);
+  return as_handle(llvm::Type::getVoidTy(*c));
+}
+
 JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ValueDescription(
   JNIEnv* e, jobject, jlong sh, jboolean is_for_debug
 ) {

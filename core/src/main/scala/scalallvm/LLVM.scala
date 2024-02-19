@@ -24,6 +24,7 @@ object LLVM {
   // --- Types ----------------------------------------------------------------
 
   @native def IntTypeInContext(bitWidth: Int, context: Handle): Handle
+  @native def VoidTypeInContext(context: Handle): Handle
 
   // --- Values ---------------------------------------------------------------
 

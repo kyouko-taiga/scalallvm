@@ -73,6 +73,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     VoidTypeInContext
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_VoidTypeInContext
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ValueDescription
  * Signature:  (JZ)Ljava/lang/String;
  */
