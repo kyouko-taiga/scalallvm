@@ -2,7 +2,7 @@ package scalallvm
 package types
 
 /** The `ptr` type of LLVM IR. */
-final class Pointer private (val handle: LLVM.Handle) extends Type {
+final class PointerType private (val handle: LLVM.Handle) extends Type {
 
   /** Creates an instance in `context` in address space `s`. */
   def this(context: Context, s: AddressSpace = AddressSpace.default) =
