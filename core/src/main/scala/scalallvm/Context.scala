@@ -13,7 +13,7 @@ final class Context private (val handle: LLVM.Handle) extends LLVMObject with Di
    *  behavior to let it escape in any way.
    */
   def withNewModule[R](n: String)(action: Module => R): R = {
-    val instance = new Module(n, this)
+    val instance = new Module(n)(this)
     try action(instance) finally instance.dispose()
   }
 
@@ -21,22 +21,22 @@ final class Context private (val handle: LLVM.Handle) extends LLVMObject with Di
   def void = new types.VoidType(this)
 
   /** LLVM's `ptr` type, in the default address space. */
-  def ptr = new types.PointerType(this)
+  def ptr = new types.PointerType()(this)
 
   /** LLVM's `i1` type. */
-  def i1 = new types.IntegerType(1, this)
+  def i1 = new types.IntegerType(1)(this)
 
   /** LLVM's `i8` type. */
-  def i8 = new types.IntegerType(8, this)
+  def i8 = new types.IntegerType(8)(this)
 
   /** LLVM's `i16` type. */
-  def i16 = new types.IntegerType(16, this)
+  def i16 = new types.IntegerType(16)(this)
 
   /** LLVM's `i32` type. */
-  def i32 = new types.IntegerType(32, this)
+  def i32 = new types.IntegerType(32)(this)
 
   /** LLVM's `i64` type. */
-  def i64 = new types.IntegerType(64, this)
+  def i64 = new types.IntegerType(64)(this)
 
   /** LLVM's `float` type. */
   def float = types.FloatingPointType.float(this)

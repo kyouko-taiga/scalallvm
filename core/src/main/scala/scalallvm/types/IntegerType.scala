@@ -5,7 +5,7 @@ package types
 final class IntegerType private (val handle: LLVM.Handle) extends Type {
 
   /** Creates an instance with the given `bitWidth` in `context`. */
-  def this(bitWidth: Int, context: Context) =
+  def this(bitWidth: Int)(implicit context: Context) =
     this(LLVM.IntTypeInContext(bitWidth, context.handle))
 
   /** Returns a constant whose LLVM IR type is `this` and whose value is `value`, truncated or

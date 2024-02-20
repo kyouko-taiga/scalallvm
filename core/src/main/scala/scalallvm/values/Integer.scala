@@ -18,7 +18,7 @@ final class Integer private (val handle: LLVM.Handle) extends Value {
    *  The type of the result corresponds to bit width the properties of `value`. For example, if
    *  `value` is a 8-bit signed integer, the type of the result is `i8`.
    */
-  def this(value: WideInteger, context: Context) =
+  def this(value: WideInteger)(implicit context: Context) =
     this(LLVM.ConstantIntCreateWide(context.handle, value.bitWidth, value._words, value.isSigned))
 
   /** The value of this cons tant as a 64-bit integer after it's been sign-extended. */

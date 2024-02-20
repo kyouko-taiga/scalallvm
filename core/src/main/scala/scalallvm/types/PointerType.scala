@@ -5,7 +5,7 @@ package types
 final class PointerType private (val handle: LLVM.Handle) extends Type {
 
   /** Creates an instance in `context` in address space `s`. */
-  def this(context: Context, s: AddressSpace = AddressSpace.default) =
+  def this(s: AddressSpace = AddressSpace.default)(implicit context: Context) =
     this(LLVM.PointerTypeInContext(s.rawValue, context.handle))
 
   /** The adress space of this pointer type. */

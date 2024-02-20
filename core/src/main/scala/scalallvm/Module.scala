@@ -4,7 +4,7 @@ package scalallvm
 final class Module private (val handle: LLVM.Handle) extends LLVMObject with Disposable {
 
   /** Creates an instance with the given `name` in `context`. */
-  def this(name: String, context: Context) =
+  def this(name: String)(implicit context: Context) =
     this(LLVM.ModuleCreateWithNameInContext(name, context.handle))
 
   /** The name of this module. */
