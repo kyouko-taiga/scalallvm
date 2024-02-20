@@ -64,9 +64,9 @@ object StructType {
 
 }
 
-/** A view on the members of a struct.
+/** A view on the members of a struct type.
  *
- *  @param base The struct containing the members in `this`.
+ *  @param base The struct type containing the members in `this`.
 */
 final class StructTypeMembers(val base: StructType) extends ArrayView[Type] {
 
