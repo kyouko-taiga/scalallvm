@@ -13,7 +13,7 @@ final class IntegerType private (val bitWidth: Int, val handle: LLVM.Handle) ext
   def this(bitWidth: Int, context: Context) =
     this(bitWidth, LLVM.IntTypeInContext(bitWidth, context.handle))
 
-  /** Returns a constant whose LLVM IR type is `this` and whose value is `value`  truncated or
+  /** Returns a constant whose LLVM IR type is `this` and whose value is `value`, truncated or
    *  sign-extended if needed to fit `bitWidth`.
    */
   def apply(value: Int): values.Integer =
