@@ -7,11 +7,11 @@ import support.ArrayView
  *
  *  @param members The types of the members of the struct.
  */
-final class Struct private (val handle: LLVM.Handle) extends Type {
+final class StructType private (val handle: LLVM.Handle) extends Type {
 
   /** The members of this struct. */
-  def members: StructMembers =
-    new StructMembers(this)
+  def members: StructTypeMembers =
+    new StructTypeMembers(this)
 
   /** The name of this struct if it is nominal. Otherwise, `None`. */
   def name: Option[String] = {
@@ -29,7 +29,7 @@ final class Struct private (val handle: LLVM.Handle) extends Type {
 
 }
 
-object Struct {
+object StructType {
 
   /** Creates and returns the type of a struct identified by `name` in `context` and having
    *  `members`, which are packed iff `packed` is `true`.
@@ -44,11 +44,11 @@ object Struct {
    */
   def nominal(
       name: String, members: Seq[Type], packed: Boolean = false
-  )(implicit context: Context): Struct = {
+  )(implicit context: Context): StructType = {
     require(!name.isEmpty, "nominal struct must have a non-empty name")
     val h = LLVM.StructTypeCreateNominalInContext(
       name, members.map(_.handle).toArray, packed, context.handle)
-    new Struct(h)
+    new StructType(h)
   }
 
   /** Returns the type of a struct structurally identified in `context` by its `members`, which
@@ -56,10 +56,10 @@ object Struct {
    */
   def structural(
       members: Seq[Type], packed: Boolean = false
-  )(implicit context: Context): Struct =  {
+  )(implicit context: Context): StructType =  {
     val h = LLVM.StructTypeCreateStructuralInContext(
       members.map(_.handle).toArray, packed, context.handle)
-    new Struct(h)
+    new StructType(h)
   }
 
 }
@@ -68,7 +68,7 @@ object Struct {
  *
  *  @param base The struct containing the members in `this`.
 */
-final class StructMembers(val base: Struct) extends ArrayView[Type] {
+final class StructTypeMembers(val base: StructType) extends ArrayView[Type] {
 
   /** The position of the first element in this view. */
   val startPosition: Int = 0
