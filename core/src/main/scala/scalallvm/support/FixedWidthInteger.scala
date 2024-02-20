@@ -1,5 +1,7 @@
 package scalallvm.support
 
+import scala.collection.immutable.ArraySeq
+
 /** A class describing types that can represent fixed-size binary integers. */
 trait FixedWidthInteger[Self] {
 
@@ -33,7 +35,7 @@ object FixedWidthInteger {
   implicit val i32: FixedWidthInteger[Int] = new FixedWidthInteger[Int] {
 
     def words(self: Int): IndexedSeq[Long] =
-      Array(self.toLong)
+      ArraySeq(self.toLong)
 
     def signum(self: Int): Int =
       math.signum(self)
@@ -53,7 +55,7 @@ object FixedWidthInteger {
   val u32: FixedWidthInteger[Int] = new FixedWidthInteger[Int] {
 
     def words(self: Int): IndexedSeq[Long] =
-      Array(Integer.toUnsignedLong(self))
+      ArraySeq(Integer.toUnsignedLong(self))
 
     def signum(self: Int): Int =
       if (self == 0) { 0 } else { 1 }
@@ -71,7 +73,7 @@ object FixedWidthInteger {
   implicit val i64: FixedWidthInteger[Long] = new FixedWidthInteger[Long] {
 
     def words(self: Long): IndexedSeq[Long] =
-      Array(self)
+      ArraySeq(self)
 
     def signum(self: Long): Int =
       math.signum(self).toInt

@@ -4,6 +4,7 @@ import FixedWidthInteger.WORD_WIDTH
 
 import java.util.Arrays
 import scala.annotation.tailrec
+import scala.collection.immutable.ArraySeq
 import scala.math
 
 /** An integer with a binary representation.
@@ -17,7 +18,7 @@ import scala.math
  *  @param isSigned `true` iff the instance's representation is signed.
  */
 final class WideInteger(
-    private val _words: Array[Long], val bitWidth: Int, val isSigned: Boolean
+    private[scalallvm] val _words: Array[Long], val bitWidth: Int, val isSigned: Boolean
 ) {
 
   import FixedWidthInteger.wide
@@ -25,8 +26,8 @@ final class WideInteger(
   require(bitWidth > 0)
 
   /** The words in the instance's representation, from least to most significant. */
-  def words: Array[Long] =
-    _words.clone()
+  def words: IndexedSeq[Long] =
+    _words.to(ArraySeq)
 
   /** Returns `-1` if `this` is negative, `1` if `this` is positive, or `0` otherwise. */
   def signum: Int = {
