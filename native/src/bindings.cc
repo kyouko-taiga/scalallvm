@@ -110,6 +110,28 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TypeDescription(
   return e->NewStringUTF(result.c_str());
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ArrayTypeCreateInContext(
+  JNIEnv*, jobject, jint count, jlong element_h, jlong context_h
+) {
+  auto* context = as_pointer<llvm::LLVMContext>(context_h);
+  auto* element = as_pointer<llvm::Type>(element_h);
+  return as_handle(llvm::ArrayType::get(element, count));
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_ArrayTypeCount(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::ArrayType>(sh);
+  return self->getNumElements();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ArrayTypeElement(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::ArrayType>(sh);
+  return as_handle(self->getElementType());
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext(
   JNIEnv*, jobject, jint bit_width, jlong context_h
 ) {

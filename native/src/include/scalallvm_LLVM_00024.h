@@ -73,6 +73,30 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TypeDescription
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     ArrayTypeCreateInContext
+ * Signature:  (IJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ArrayTypeCreateInContext
+  (JNIEnv *, jobject, jint, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ArrayTypeCount
+ * Signature:  (J)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_ArrayTypeCount
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ArrayTypeElement
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ArrayTypeElement
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     IntTypeInContext
  * Signature:  (IJ)J
  */

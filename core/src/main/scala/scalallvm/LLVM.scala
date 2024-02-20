@@ -30,6 +30,12 @@ object LLVM {
 
   @native def TypeDescription(self: Handle, isForDebug: Boolean): String
 
+  @native def ArrayTypeCreateInContext(count: Int, element: Handle, context: Handle): Handle
+
+  @native def ArrayTypeCount(self: Handle): Int
+
+  @native def ArrayTypeElement(self: Handle): Handle
+
   @native def IntTypeInContext(bitWidth: Int, context: Handle): Handle
 
   @native def PointerTypeInContext(space: Int, context: Handle): Handle
