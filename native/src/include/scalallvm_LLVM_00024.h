@@ -65,6 +65,14 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     TypeDescription
+ * Signature:  (JZ)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TypeDescription
+  (JNIEnv *, jobject, jlong, jboolean);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     IntTypeInContext
  * Signature:  (IJ)J
  */

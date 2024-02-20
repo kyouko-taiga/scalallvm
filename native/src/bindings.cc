@@ -87,6 +87,17 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName(
   self->setModuleIdentifier(n);
 }
 
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TypeDescription(
+  JNIEnv* e, jobject, jlong sh, jboolean is_for_debug
+) {
+  auto* self = as_pointer<llvm::Type>(sh);
+  std::string result;
+  llvm::raw_string_ostream o(result);
+  self->print(o, is_for_debug);
+  o.flush();
+  return e->NewStringUTF(result.c_str());
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext(
   JNIEnv*, jobject, jint bit_width, jlong context_h
 ) {

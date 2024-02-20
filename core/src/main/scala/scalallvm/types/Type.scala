@@ -10,4 +10,7 @@ trait Type extends LLVMObject {
     new values.Value { val handle = h }
   }
 
+  override def toString(): String =
+    LLVM.TypeDescription(handle, false)
+
 }

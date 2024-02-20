@@ -28,6 +28,8 @@ object LLVM {
 
   // --- Types ----------------------------------------------------------------
 
+  @native def TypeDescription(self: Handle, isForDebug: Boolean): String
+
   @native def IntTypeInContext(bitWidth: Int, context: Handle): Handle
 
   @native def PointerTypeInContext(space: Int, context: Handle): Handle
