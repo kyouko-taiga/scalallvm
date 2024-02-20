@@ -5,7 +5,7 @@ package types
  *
  *  @param bitWidth The number of bits in the representation of the type's instances.
  */
-final class Integer private (val bitWidth: Int, val handle: LLVM.Handle) extends Type {
+final class IntegerType private (val bitWidth: Int, val handle: LLVM.Handle) extends Type {
 
   require(bitWidth > 0)
 

@@ -2,6 +2,7 @@ package scalallvm
 package values
 
 import support.WideInteger
+import types.IntegerType
 
 /** A constant integer value in LLVM IR. */
 final class Integer private (val handle: LLVM.Handle) extends Value {
@@ -9,7 +10,7 @@ final class Integer private (val handle: LLVM.Handle) extends Value {
   /** Creates an instance whose LLVM IR type is `tpe` and whose value is `value` truncated or
    *  sign-extended if needed to fit `tpe.bitWidth`.
    */
-  def this(tpe: types.Integer, value: Int) =
+  def this(tpe: IntegerType, value: Int) =
     this(LLVM.ConstantIntCreate(tpe.handle, value.toLong, true))
 
   /** Creates an instance whose LLVM IR with the given `value` in `context`.

@@ -24,19 +24,19 @@ final class Context private (val handle: LLVM.Handle) extends LLVMObject with Di
   def ptr = new types.Pointer(this)
 
   /** LLVM's `i1` type. */
-  def i1 = new types.Integer(1, this)
+  def i1 = new types.IntegerType(1, this)
 
   /** LLVM's `i8` type. */
-  def i8 = new types.Integer(8, this)
+  def i8 = new types.IntegerType(8, this)
 
   /** LLVM's `i16` type. */
-  def i16 = new types.Integer(16, this)
+  def i16 = new types.IntegerType(16, this)
 
   /** LLVM's `i32` type. */
-  def i32 = new types.Integer(32, this)
+  def i32 = new types.IntegerType(32, this)
 
   /** LLVM's `i64` type. */
-  def i64 = new types.Integer(64, this)
+  def i64 = new types.IntegerType(64, this)
 
   def dispose(): Unit =
     LLVM.ContextDispose(handle)
