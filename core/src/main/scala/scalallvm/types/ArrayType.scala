@@ -2,7 +2,7 @@ package scalallvm
 package types
 
 /** An array type in LLVM IR. */
-final class LLVMArray private (val handle: LLVM.Handle) extends Type {
+final class ArrayType private (val handle: LLVM.Handle) extends Type {
 
   /** Creates an instance representing arrays of `count` `element`s in `context`. */
   def this(count: Int, element: Type)(implicit context: Context) =
