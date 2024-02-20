@@ -3,7 +3,7 @@ package types
 import scalallvm.Context
 import scalallvm.types
 
-class StructTests extends munit.FunSuite {
+class StructTypeTests extends munit.FunSuite {
 
   test("init nominal") {
     Context.withNew { (llvm) =>

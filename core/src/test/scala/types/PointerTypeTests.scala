@@ -3,7 +3,7 @@ package types
 import scalallvm.{AddressSpace, Context}
 import scalallvm.types
 
-class PointerTests extends munit.FunSuite {
+class PointerTypeTests extends munit.FunSuite {
 
   test("addressSpace") {
     Context.withNew { (llvm) =>
