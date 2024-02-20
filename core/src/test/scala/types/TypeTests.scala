@@ -1,13 +1,13 @@
 package types
 
 import scalallvm.Context
-import scalallvm.types.Void
+import scalallvm.types
 
 class TypeTests extends munit.FunSuite {
 
   test("init equals") {
     Context.withNew { (llvm) =>
-      val t = new Void(llvm)
+      val t = new types.VoidType(llvm)
       assert(t == llvm.void)
       assert(t != llvm.i8)
     }

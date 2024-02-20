@@ -18,7 +18,7 @@ final class Context private (val handle: LLVM.Handle) extends LLVMObject with Di
   }
 
   /** LLVM's `void` type. */
-  def void = new types.Void(this)
+  def void = new types.VoidType(this)
 
   /** LLVM's `ptr` type, in the default address space. */
   def ptr = new types.PointerType(this)
