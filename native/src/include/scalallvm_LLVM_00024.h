@@ -97,6 +97,22 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ArrayTypeElement
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     DoubleTypeInContext
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_DoubleTypeInContext
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FloatTypeInContext
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FloatTypeInContext
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     IntTypeInContext
  * Signature:  (IJ)J
  */
@@ -246,6 +262,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantIntGetSExtValue
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantIntGetZExtValue
   (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantDouble
+ * Signature:  (JD)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantDouble
+  (JNIEnv *, jobject, jlong, jdouble);
 
 #ifdef __cplusplus
 }

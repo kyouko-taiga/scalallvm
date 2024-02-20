@@ -132,6 +132,20 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ArrayTypeElement(
   return as_handle(self->getElementType());
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_DoubleTypeInContext(
+  JNIEnv*, jobject, jlong context_h
+) {
+  auto* context = as_pointer<llvm::LLVMContext>(context_h);
+  return as_handle(llvm::Type::getDoubleTy(*context));
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FloatTypeInContext(
+  JNIEnv*, jobject, jlong context_h
+) {
+  auto* context = as_pointer<llvm::LLVMContext>(context_h);
+  return as_handle(llvm::Type::getFloatTy(*context));
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext(
   JNIEnv*, jobject, jint bit_width, jlong context_h
 ) {
@@ -280,4 +294,11 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantIntGetZExtValue(
 ) {
   auto* self = as_pointer<llvm::ConstantInt>(sh);
   return self->getZExtValue();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantDouble(
+  JNIEnv*, jobject, jlong type_h, jdouble value
+) {
+  auto* t = as_pointer<llvm::Type>(type_h);
+  return as_handle(llvm::ConstantFP::get(t, value));
 }

@@ -36,6 +36,10 @@ object LLVM {
 
   @native def ArrayTypeElement(self: Handle): Handle
 
+  @native def DoubleTypeInContext(context: Handle): Handle
+
+  @native def FloatTypeInContext(context: Handle): Handle
+
   @native def IntTypeInContext(bitWidth: Int, context: Handle): Handle
 
   @native def PointerTypeInContext(space: Int, context: Handle): Handle
@@ -80,6 +84,8 @@ object LLVM {
   @native def ConstantIntGetSExtValue(tpe: Handle): Long
 
   @native def ConstantIntGetZExtValue(tpe: Handle): Long
+
+  @native def ConstantDouble(tpe: Handle, value: Double): Handle
 
   // --- Support --------------------------------------------------------------
 

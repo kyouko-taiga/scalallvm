@@ -38,6 +38,12 @@ final class Context private (val handle: LLVM.Handle) extends LLVMObject with Di
   /** LLVM's `i64` type. */
   def i64 = new types.IntegerType(64, this)
 
+  /** LLVM's `float` type. */
+  def float = types.FloatingPointType.float(this)
+
+  /** LLVM's `double` type. */
+  def double = types.FloatingPointType.double(this)
+
   def dispose(): Unit =
     LLVM.ContextDispose(handle)
 
