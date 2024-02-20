@@ -36,6 +36,26 @@ object LLVM {
 
   @native def PointerTypeGetAddressSpace(self: Handle): Int
 
+  @native def StructTypeCreateNominalInContext(
+      name: String, members: Array[Handle], packed: Boolean, context: Handle
+  ): Handle
+
+  @native def StructTypeCreateStructuralInContext(
+      members: Array[Handle], packed: Boolean, context: Handle
+  ): Handle
+
+  @native def StructTypeGetName(self: Handle): String
+
+  @native def StructTypeIsLiteral(self: Handle): Boolean
+
+  @native def StructTypeIsOpaque(self: Handle): Boolean
+
+  @native def StructTypeIsPacked(self: Handle): Boolean
+
+  @native def StructTypeMemberAt(self: Handle, position: Int): Handle
+
+  @native def StructTypeMemberCount(self: Handle): Int
+
   @native def VoidTypeInContext(context: Handle): Handle
 
   // --- Values ---------------------------------------------------------------

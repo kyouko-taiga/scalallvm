@@ -18,6 +18,18 @@ T* as_pointer(jlong h) {
   return static_cast<T*>(reinterpret_cast<void*>(h));
 }
 
+template<typename T, typename R>
+auto with_pointers(JNIEnv* e, jlongArray handles, const auto& action) {
+  jlong* h = e->GetLongArrayElements(handles, nullptr);
+  auto c = e->GetArrayLength(handles);
+  T* a[c];
+  for (auto i = 0; i < c; ++i) {
+    a[i] = as_pointer<T>(h[i]);
+  }
+  e->ReleaseLongArrayElements(handles, h, 0);
+  return action(llvm::ArrayRef(a, c));
+}
+
 /// Constructs a llvm::APInt with the given properties.
 llvm::APInt arbitrary_precision_integer(
     JNIEnv* e, jint bit_width, jlongArray words, jboolean is_signed
@@ -117,6 +129,74 @@ JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_PointerTypeGetAddressSpace(
 ) {
   auto* self = as_pointer<llvm::PointerType>(sh);
   return self->getAddressSpace();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeCreateNominalInContext(
+  JNIEnv* e, jobject, jstring name, jlongArray members, jboolean is_packed, jlong context_h
+) {
+  auto* context = as_pointer<llvm::LLVMContext>(context_h);
+  const char* n = e->GetStringUTFChars(name, NULL);
+  auto* t = llvm::StructType::create(*context, n);
+  with_pointers<llvm::Type, void>(e, members, [=](auto ms) {
+    t->setBody(ms, is_packed);
+  });
+  return as_handle(t);
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeCreateStructuralInContext(
+  JNIEnv* e, jobject, jlongArray members, jboolean is_packed, jlong context_h
+) {
+  auto* context = as_pointer<llvm::LLVMContext>(context_h);
+  auto* t = with_pointers<llvm::Type, llvm::StructType*>(e, members, [=](auto ms) {
+    return llvm::StructType::get(*context, ms, is_packed);
+  });
+  return as_handle(t);
+}
+
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_StructTypeGetName(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::StructType>(sh);
+  if (self->hasName()) {
+    return e->NewStringUTF(self->getName().str().c_str());
+  } else {
+    return nullptr;
+  }
+}
+
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StructTypeIsLiteral(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::StructType>(sh);
+  return self->isLiteral();
+}
+
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StructTypeIsOpaque(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::StructType>(sh);
+  return self->isOpaque();
+}
+
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StructTypeIsPacked(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::StructType>(sh);
+  return self->isPacked();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeMemberAt(
+  JNIEnv *, jobject, jlong sh, jint p
+) {
+  auto* self = as_pointer<llvm::StructType>(sh);
+  return as_handle(self->elements()[p]);
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_StructTypeMemberCount(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::StructType>(sh);
+  return self->elements().size();
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_VoidTypeInContext(

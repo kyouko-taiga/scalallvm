@@ -89,10 +89,74 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_PointerTypeInContext
 
 /*
  * Class:      scalallvm_LLVM_00024
- * Method:     PointerTypeGetGetAddressSpace
+ * Method:     PointerTypeGetAddressSpace
  * Signature:  (J)I
  */
 JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_PointerTypeGetAddressSpace
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StructTypeCreateNominalInContext
+ * Signature:  (Ljava/lang/String;[JZJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeCreateNominalInContext
+  (JNIEnv *, jobject, jstring, jlongArray, jboolean, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StructTypeCreateStructuralInContext
+ * Signature:  ([JZJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeCreateStructuralInContext
+  (JNIEnv *, jobject, jlongArray, jboolean, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StructTypeGetName
+ * Signature:  (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_StructTypeGetName
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StructTypeIsLiteral
+ * Signature:  (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StructTypeIsLiteral
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StructTypeIsOpaque
+ * Signature:  (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StructTypeIsOpaque
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StructTypeIsPacked
+ * Signature:  (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StructTypeIsPacked
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StructTypeMemberAt
+ * Signature:  (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeMemberAt
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StructTypeMemberCount
+ * Signature:  (J)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_StructTypeMemberCount
   (JNIEnv *, jobject, jlong);
 
 /*
