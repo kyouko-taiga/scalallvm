@@ -146,6 +146,37 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FloatTypeInContext(
   return as_handle(llvm::Type::getFloatTy(*context));
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionType(
+  JNIEnv* e, jobject, jlongArray parameters_h, jlong return_type_h
+) {
+  auto* r = as_pointer<llvm::Type>(return_type_h);
+  auto* t = with_pointers<llvm::Type, llvm::FunctionType*>(e, parameters_h, [=](auto ps) {
+    return llvm::FunctionType::get(r, ps, false);
+  });
+  return as_handle(t);
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionTypeParameterAt(
+  JNIEnv*, jobject, jlong sh, jint p
+) {
+  auto* self = as_pointer<llvm::FunctionType>(sh);
+  return as_handle(self->params()[p]);
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_FunctionTypeParameterCount(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::FunctionType>(sh);
+  return self->getNumParams();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionTypeReturn(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::FunctionType>(sh);
+  return as_handle(self->getReturnType());
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext(
   JNIEnv*, jobject, jint bit_width, jlong context_h
 ) {

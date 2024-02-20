@@ -113,6 +113,38 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FloatTypeInContext
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionType
+ * Signature:  ([JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionType
+  (JNIEnv *, jobject, jlongArray, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionTypeParameterAt
+ * Signature:  (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionTypeParameterAt
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionTypeParameterCount
+ * Signature:  (J)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_FunctionTypeParameterCount
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionTypeReturn
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionTypeReturn
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     IntTypeInContext
  * Signature:  (IJ)J
  */

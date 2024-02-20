@@ -40,6 +40,14 @@ object LLVM {
 
   @native def FloatTypeInContext(context: Handle): Handle
 
+  @native def FunctionType(parameters: Array[Handle], returnType: Handle): Handle
+
+  @native def FunctionTypeParameterAt(self: Handle, position: Int): Handle
+
+  @native def FunctionTypeParameterCount(self: Handle): Int
+
+  @native def FunctionTypeReturn(self: Handle): Handle
+
   @native def IntTypeInContext(bitWidth: Int, context: Handle): Handle
 
   @native def PointerTypeInContext(space: Int, context: Handle): Handle
