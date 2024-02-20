@@ -23,7 +23,4 @@ final class IntegerType private (val bitWidth: Int, val handle: LLVM.Handle) ext
   def zero: values.Integer =
     new values.Integer(this, 0)
 
-  override def toString(): String =
-    s"i${bitWidth}"
-
 }
