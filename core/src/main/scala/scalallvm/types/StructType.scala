@@ -10,8 +10,8 @@ import support.ArrayView
 final class StructType private (val handle: LLVM.Handle) extends Type {
 
   /** The members of this struct. */
-  def members: StructTypeMembers =
-    new StructTypeMembers(this)
+  def members: StructType.Members =
+    new StructType.Members(this)
 
   /** The name of this struct if it is nominal. Otherwise, `None`. */
   def name: Option[String] = {
@@ -62,24 +62,24 @@ object StructType {
     new StructType(h)
   }
 
-}
+  /** A view on the members of a struct type.
+   *
+   *  @param base The struct type containing the members in `this`.
+  */
+  final class Members(val base: StructType) extends ArrayView[Type] {
 
-/** A view on the members of a struct type.
- *
- *  @param base The struct type containing the members in `this`.
-*/
-final class StructTypeMembers(val base: StructType) extends ArrayView[Type] {
+    /** The position of the first element in this view. */
+    val startPosition: Int = 0
 
-  /** The position of the first element in this view. */
-  val startPosition: Int = 0
+    /** The position after the last element in this view. */
+    val endPosition: Int = LLVM.StructTypeMemberCount(base.handle)
 
-  /** The position after the last element in this view. */
-  val endPosition: Int = LLVM.StructTypeMemberCount(base.handle)
+    /** Accesses the element at position `p`. */
+    def elementAt(p: Int): Type = {
+      require((startPosition <= p) && (p < endPosition))
+      new Type { val handle = LLVM.StructTypeMemberAt(base.handle, p) }
+    }
 
-  /** Accesses the element at position `p`. */
-  def elementAt(p: Int): Type = {
-    require((startPosition <= p) && (p < endPosition))
-    new Type { val handle = LLVM.StructTypeMemberAt(base.handle, p) }
   }
 
 }
