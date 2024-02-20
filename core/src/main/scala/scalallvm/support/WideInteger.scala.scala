@@ -1,7 +1,5 @@
 package scalallvm.support
 
-import FixedWidthInteger.WORD_WIDTH
-
 import java.util.Arrays
 import scala.annotation.tailrec
 import scala.collection.immutable.ArraySeq
@@ -108,6 +106,8 @@ final class WideInteger(
 }
 
 object WideInteger {
+
+  import FixedWidthInteger.WORD_WIDTH
 
   /** Creates an instance truncating or sign-extending `source` to fit `bitWidth`.
    *
