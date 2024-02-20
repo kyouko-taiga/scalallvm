@@ -32,7 +32,7 @@ auto with_pointers(JNIEnv* e, jlongArray handles, const auto& action) {
 
 /// Constructs a llvm::APInt with the given properties.
 llvm::APInt arbitrary_precision_integer(
-    JNIEnv* e, jint bit_width, jlongArray words, jboolean is_signed
+  JNIEnv* e, jint bit_width, jlongArray words, jboolean is_signed
 ) {
   jlong* w = e->GetLongArrayElements(words, nullptr);
   auto c = e->GetArrayLength(words);
