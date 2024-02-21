@@ -27,6 +27,10 @@ final class StructType private (val handle: LLVM.Handle) extends Type {
   def isPacked: Boolean =
     LLVM.StructTypeIsPacked(handle)
 
+  /** Returns a constant whose LLVM IR type is `this` that aggregates `cs`. */
+  def apply(cs: Seq[values.Constant]): values.Struct =
+    new values.Struct(this, cs)
+
   override def kind: TypeKind =
     TypeKind.struct
 

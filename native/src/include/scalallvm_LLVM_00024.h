@@ -329,6 +329,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ValueGetType
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantAggregateMemberAt
+ * Signature:  (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantAggregateMemberAt
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ConstantNullValue
  * Signature:  (J)J
  */
@@ -374,6 +382,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantIntGetZExtValue
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantDouble
   (JNIEnv *, jobject, jlong, jdouble);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantStruct
+ * Signature:  (J[J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStruct
+  (JNIEnv *, jobject, jlong, jlongArray);
 
 #ifdef __cplusplus
 }

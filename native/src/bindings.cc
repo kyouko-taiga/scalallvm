@@ -346,6 +346,13 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ValueGetType(
   return as_handle(self->getType());
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantAggregateMemberAt(
+  JNIEnv*, jobject, jlong sh, jint p
+) {
+  auto* self = as_pointer<llvm::ConstantAggregate>(sh);
+  return as_handle(self->getAggregateElement(p));
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantNullValue(
   JNIEnv*, jobject, jlong type_h
 ) {
@@ -387,4 +394,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantDouble(
 ) {
   auto* t = as_pointer<llvm::Type>(type_h);
   return as_handle(llvm::ConstantFP::get(t, value));
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStruct(
+  JNIEnv* e, jobject, jlong type_h, jlongArray members_h
+) {
+  auto* s = as_pointer<llvm::StructType>(type_h);
+  auto* t = with_pointers<llvm::Constant, llvm::ConstantStruct*>(e, members_h, [=](auto ms) {
+    return llvm::ConstantStruct::get(s, ms);
+  });
+  return as_handle(t);
 }

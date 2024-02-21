@@ -100,6 +100,8 @@ object LLVM {
 
   @native def ValueGetType(self: Handle): Handle
 
+  @native def ConstantAggregateMemberAt(self: Handle, position: Int): Handle
+
   @native def ConstantNullValue(tpe: Handle): Handle
 
   @native def ConstantIntCreate(tpe: Handle, value: Long, signed: Boolean): Handle
@@ -112,6 +114,8 @@ object LLVM {
   @native def ConstantIntGetZExtValue(tpe: Handle): Long
 
   @native def ConstantDouble(tpe: Handle, value: Double): Handle
+
+  @native def ConstantStruct(tpe: Handle, members: Array[Handle]): Handle
 
   // --- Support --------------------------------------------------------------
 
