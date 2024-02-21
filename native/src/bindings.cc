@@ -34,6 +34,16 @@ auto with_pointers(JNIEnv* e, jlongArray handles, F&& action) {
   return action(llvm::ArrayRef(a, c));
 }
 
+/// Returns the result of calling `action` on a buffer containing the utf-8 contents of `s`.
+template<typename F>
+requires std::invocable<F, const char*>
+auto with_utf8(JNIEnv* e, jstring s, F&& action) {
+  const char* n = e->GetStringUTFChars(s, NULL);
+  auto result = action(n);
+  e->ReleaseStringUTFChars(s, n);
+  return result;
+}
+
 /// Constructs a llvm::APInt with the given properties.
 llvm::APInt arbitrary_precision_integer(
   JNIEnv* e, jint bit_width, jlongArray words, jboolean is_signed
@@ -66,9 +76,9 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ContextDispose(
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ModuleCreateWithNameInContext(
   JNIEnv* e, jobject, jstring name, jlong context_h
 ) {
-  const char* n = e->GetStringUTFChars(name, NULL);
-  auto* c = as_pointer<llvm::LLVMContext>(context_h);
-  return as_handle(new llvm::Module(n, *c));
+  auto* context = as_pointer<llvm::LLVMContext>(context_h);
+  auto* result = with_utf8(e, name, [=](auto n) { return new llvm::Module(n, *context); });
+  return as_handle(result);
 }
 
 JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleDescription(
@@ -99,8 +109,10 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName(
   JNIEnv* e, jobject, jlong sh, jstring name
 ) {
   auto* self = as_pointer<llvm::Module>(sh);
-  const char* n = e->GetStringUTFChars(name, NULL);
-  self->setModuleIdentifier(n);
+  with_utf8(e, name, [=](auto n) {
+    self->setModuleIdentifier(n);
+    return std::monostate{};
+  });
 }
 
 JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TypeDescription(
@@ -249,12 +261,11 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeCreateNominalInConte
   JNIEnv* e, jobject, jstring name, jlongArray members, jboolean is_packed, jlong context_h
 ) {
   auto* context = as_pointer<llvm::LLVMContext>(context_h);
-  const char* n = e->GetStringUTFChars(name, NULL);
-  auto* t = llvm::StructType::create(*context, n);
+  auto* result = with_utf8(e, name, [=](auto n) { return llvm::StructType::create(*context, n); });
   with_pointers<llvm::Type>(e, members, [=](auto ms) {
-    t->setBody(ms, is_packed);
+    result->setBody(ms, is_packed);
   });
-  return as_handle(t);
+  return as_handle(result);
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeCreateStructuralInContext(
@@ -422,9 +433,9 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStringInContext(
   JNIEnv* e, jobject, jstring text, jboolean null_terminated, jlong context_h
 ) {
   auto* context = as_pointer<llvm::LLVMContext>(context_h);
-  const char* n = e->GetStringUTFChars(text, NULL);
-  auto* result = llvm::ConstantDataArray::getString(*context, n, null_terminated);
-  e->ReleaseStringUTFChars(text, n);
+  auto* result = with_utf8(e, text, [=](auto n) {
+    return llvm::ConstantDataArray::getString(*context, n, null_terminated);
+  });
   return as_handle(result);
 }
 
