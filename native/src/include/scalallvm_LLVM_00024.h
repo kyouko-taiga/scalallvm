@@ -385,6 +385,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantDouble
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantPoison
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantPoison
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ConstantStruct
  * Signature:  (J[J)J
  */

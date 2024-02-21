@@ -396,6 +396,13 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantDouble(
   return as_handle(llvm::ConstantFP::get(t, value));
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantPoison(
+  JNIEnv *, jobject, jlong type_h
+) {
+  auto* t = as_pointer<llvm::Type>(type_h);
+  return as_handle(llvm::PoisonValue::get(t));
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStruct(
   JNIEnv* e, jobject, jlong type_h, jlongArray members_h
 ) {

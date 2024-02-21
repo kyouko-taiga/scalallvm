@@ -115,6 +115,8 @@ object LLVM {
 
   @native def ConstantDouble(tpe: Handle, value: Double): Handle
 
+  @native def ConstantPoison(tpw: Handle): Handle
+
   @native def ConstantStruct(tpe: Handle, members: Array[Handle]): Handle
 
   @native def ConstantUndefined(tpe: Handle): Handle
