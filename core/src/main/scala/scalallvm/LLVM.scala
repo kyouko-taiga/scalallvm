@@ -102,6 +102,8 @@ object LLVM {
 
   @native def ConstantAggregateMemberAt(self: Handle, position: Int): Handle
 
+  @native def ConstantArray(element: Handle, members: Array[Handle]): Handle
+
   @native def ConstantNullValue(tpe: Handle): Handle
 
   @native def ConstantIntCreate(tpe: Handle, value: Long, signed: Boolean): Handle

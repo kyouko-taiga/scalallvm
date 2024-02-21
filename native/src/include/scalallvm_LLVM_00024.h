@@ -337,6 +337,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantAggregateMemberAt
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantArray
+ * Signature:  (J[J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantArray
+  (JNIEnv *, jobject, jlong, jlongArray);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ConstantNullValue
  * Signature:  (J)J
  */

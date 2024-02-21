@@ -18,6 +18,15 @@ final class ArrayType private (val handle: LLVM.Handle) extends Type {
     new Type { val handle = h }
   }
 
+  /** Returns a constant whose LLVM IR type is `this` that aggregates `cs`.
+   *
+   *  @param cs The elements of the returned array. `cs.length` must be equal to `length`.
+   */
+  def apply(cs: Seq[values.Constant]): values.LLVMArray = {
+    require(cs.length == length)
+    new values.LLVMArray(element, cs)
+  }
+
   override def kind: TypeKind =
     TypeKind.array
 
