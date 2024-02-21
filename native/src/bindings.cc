@@ -405,3 +405,10 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStruct(
   });
   return as_handle(t);
 }
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantUndefined(
+  JNIEnv*, jobject, jlong type_h
+) {
+  auto* t = as_pointer<llvm::Type>(type_h);
+  return as_handle(llvm::UndefValue::get(t));
+}

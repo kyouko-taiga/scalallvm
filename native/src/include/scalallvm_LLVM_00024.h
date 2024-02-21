@@ -391,6 +391,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantDouble
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStruct
   (JNIEnv *, jobject, jlong, jlongArray);
 
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantUndefined
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantUndefined
+  (JNIEnv *, jobject, jlong);
+
 #ifdef __cplusplus
 }
 #endif

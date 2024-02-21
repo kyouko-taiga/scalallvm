@@ -117,6 +117,8 @@ object LLVM {
 
   @native def ConstantStruct(tpe: Handle, members: Array[Handle]): Handle
 
+  @native def ConstantUndefined(tpe: Handle): Handle
+
   // --- Support --------------------------------------------------------------
 
 }
