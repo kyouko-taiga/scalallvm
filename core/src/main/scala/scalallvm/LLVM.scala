@@ -119,6 +119,10 @@ object LLVM {
 
   @native def ConstantPoison(tpw: Handle): Handle
 
+  @native def ConstantStringInContext(
+      text: String, nullTerminated: Boolean, context: Handle
+  ): Handle
+
   @native def ConstantStruct(tpe: Handle, members: Array[Handle]): Handle
 
   @native def ConstantUndefined(tpe: Handle): Handle

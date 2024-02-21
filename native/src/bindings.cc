@@ -414,6 +414,16 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantPoison(
   return as_handle(llvm::PoisonValue::get(t));
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStringInContext(
+  JNIEnv* e, jobject, jstring text, jboolean null_terminated, jlong context_h
+) {
+  auto* context = as_pointer<llvm::LLVMContext>(context_h);
+  const char* n = e->GetStringUTFChars(text, NULL);
+  auto* result = llvm::ConstantDataArray::getString(*context, n, null_terminated);
+  e->ReleaseStringUTFChars(text, n);
+  return as_handle(result);
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStruct(
   JNIEnv* e, jobject, jlong type_h, jlongArray members_h
 ) {

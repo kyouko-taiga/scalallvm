@@ -401,6 +401,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantPoison
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     ConstantStringInContext
+ * Signature:  (Ljava/lang/String;ZJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStringInContext
+  (JNIEnv *, jobject, jstring, jboolean, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ConstantStruct
  * Signature:  (J[J)J
  */

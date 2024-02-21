@@ -14,13 +14,27 @@ final class LLVMArray private (val handle: LLVM.Handle) extends Constant {
   def this(element: Type, members: Seq[Constant]) =
     this(LLVM.ConstantArray(element.handle, members.map(_.handle).toArray))
 
+  /** The number of elements in this array. */
+  def length: Int =
+    ArrayType(tpe).get.length
+
   /** The members of this array. */
-  def members: ArrayConstant.Members =
-    new ArrayConstant.Members(this)
+  def members: LLVMArray.Members =
+    new LLVMArray.Members(this)
 
 }
 
-object ArrayConstant {
+object LLVMArray {
+
+  /** Creates an array of `i8` values with the utf8 contents of `text` in `context`, adding a null
+   *  terminator iff `nullTerminated` is `true`.
+   *
+   *  @param text The payload of the returned array.
+   *  @param nullTerminated `true` iff a null-terminator should be added to the contents of the
+   *         returned array, increasing its length by one.
+   */
+  def string(text: String, nullTerminated: Boolean = true)(implicit context: Context): LLVMArray =
+    new LLVMArray(LLVM.ConstantStringInContext(text, nullTerminated, context.handle))
 
   /** A view on the members of an array in LLVM.
    *
@@ -31,7 +45,7 @@ object ArrayConstant {
     val startPosition: Int = 0
 
     val endPosition: Int =
-      ArrayType(base.tpe).get.length
+      base.length
 
     def elementAt(p: Int): Constant = {
       require((startPosition <= p) && (p < endPosition))
