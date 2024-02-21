@@ -9,7 +9,7 @@ final class FloatingPointType private (val handle: LLVM.Handle) extends Type {
 
   /** Returns a constant whose LLVM IR type is `this` and whose value is `value`.
    */
-  def apply(value: Int): values.FloatingPoint =
+  def apply(value: Double): values.FloatingPoint =
     new values.FloatingPoint(this, value)
 
 }
