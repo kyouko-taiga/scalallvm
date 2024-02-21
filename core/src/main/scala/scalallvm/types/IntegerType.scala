@@ -18,4 +18,14 @@ final class IntegerType private (val handle: LLVM.Handle) extends Type {
   def zero: values.Integer =
     new values.Integer(this, 0)
 
+  override def kind: TypeKind =
+    TypeKind.integer
+
+}
+
+object IntegerType {
+
+  def apply(t: Type): Option[IntegerType] =
+    if (t.kind == TypeKind.integer) { Some(new IntegerType(t.handle)) } else { None }
+
 }

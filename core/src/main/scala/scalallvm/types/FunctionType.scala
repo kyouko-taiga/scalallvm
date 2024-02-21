@@ -20,9 +20,15 @@ final class FunctionType private (val handle: LLVM.Handle) extends Type {
     new types.Type { val handle = h }
   }
 
+  override def kind: TypeKind =
+    TypeKind.function
+
 }
 
 object FunctionType {
+
+  def apply(t: Type): Option[FunctionType] =
+    if (t.kind == TypeKind.function) { Some(new FunctionType(t.handle)) } else { None }
 
   /** A view on the parameters of a function type.
    *

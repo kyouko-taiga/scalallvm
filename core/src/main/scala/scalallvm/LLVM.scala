@@ -30,17 +30,27 @@ object LLVM {
 
   @native def TypeDescription(self: Handle, isForDebug: Boolean): String
 
+  @native def TypeGetKind(self: Handle): Byte
+
   @native def ArrayTypeCreateInContext(count: Int, element: Handle, context: Handle): Handle
 
   @native def ArrayTypeCount(self: Handle): Int
 
   @native def ArrayTypeElement(self: Handle): Handle
 
+  @native def ArrayTypeKind(): Byte
+
   @native def DoubleTypeInContext(context: Handle): Handle
+
+  @native def DoubleTypeKind(): Byte
 
   @native def FloatTypeInContext(context: Handle): Handle
 
+  @native def FloatTypeKind(): Byte
+
   @native def FunctionType(parameters: Array[Handle], returnType: Handle): Handle
+
+  @native def FunctionTypeKind(): Byte
 
   @native def FunctionTypeParameterAt(self: Handle, position: Int): Handle
 
@@ -50,7 +60,11 @@ object LLVM {
 
   @native def IntTypeInContext(bitWidth: Int, context: Handle): Handle
 
+  @native def IntegerTypeKind(): Byte
+
   @native def PointerTypeInContext(space: Int, context: Handle): Handle
+
+  @native def PointerTypeKind(): Byte
 
   @native def PointerTypeGetAddressSpace(self: Handle): Int
 
@@ -70,11 +84,15 @@ object LLVM {
 
   @native def StructTypeIsPacked(self: Handle): Boolean
 
+  @native def StructTypeKind(): Byte
+
   @native def StructTypeMemberAt(self: Handle, position: Int): Handle
 
   @native def StructTypeMemberCount(self: Handle): Int
 
   @native def VoidTypeInContext(context: Handle): Handle
+
+  @native def VoidTypeKind(): Byte
 
   // --- Values ---------------------------------------------------------------
 

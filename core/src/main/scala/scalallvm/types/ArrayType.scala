@@ -18,4 +18,14 @@ final class ArrayType private (val handle: LLVM.Handle) extends Type {
     new Type { val handle = h }
   }
 
+  override def kind: TypeKind =
+    TypeKind.array
+
+}
+
+object ArrayType {
+
+  def apply(t: Type): Option[ArrayType] =
+    if (t.kind == TypeKind.array) { Some(new ArrayType(t.handle)) } else { None }
+
 }

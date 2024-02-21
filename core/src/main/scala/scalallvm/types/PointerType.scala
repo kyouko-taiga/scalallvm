@@ -12,4 +12,14 @@ final class PointerType private (val handle: LLVM.Handle) extends Type {
   def addressSpace: AddressSpace =
     new AddressSpace(LLVM.PointerTypeGetAddressSpace(handle))
 
+  override def kind: TypeKind =
+    TypeKind.pointer
+
+}
+
+object PointerType {
+
+  def apply(t: Type): Option[PointerType] =
+    if (t.kind == TypeKind.pointer) { Some(new PointerType(t.handle)) } else { None }
+
 }

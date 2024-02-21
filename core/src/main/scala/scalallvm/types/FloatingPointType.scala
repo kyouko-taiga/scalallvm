@@ -16,6 +16,17 @@ final class FloatingPointType private (val handle: LLVM.Handle) extends Type {
 
 object FloatingPointType {
 
+  /** Returns `t` as an instance of `FloatingPointType` if it has the same kind. */
+  def apply(t: Type): Option[FloatingPointType] =
+    t match {
+      case u if t.kind == TypeKind.double =>
+        Some(new FloatingPointType(t.handle))
+      case u if t.kind == TypeKind.float =>
+        Some(new FloatingPointType(t.handle))
+      case _ =>
+        None
+    }
+
   /** Returns LLVM's `float` type in `context`. */
   def float(implicit context: Context): FloatingPointType =
     new FloatingPointType(LLVM.FloatTypeInContext(context.handle))

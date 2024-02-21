@@ -27,9 +27,15 @@ final class StructType private (val handle: LLVM.Handle) extends Type {
   def isPacked: Boolean =
     LLVM.StructTypeIsPacked(handle)
 
+  override def kind: TypeKind =
+    TypeKind.struct
+
 }
 
 object StructType {
+
+  def apply(t: Type): Option[StructType] =
+    if (t.kind == TypeKind.struct) { Some(new StructType(t.handle)) } else { None }
 
   /** Creates and returns the type of a struct identified by `name` in `context` and having
    *  `members`, which are packed iff `packed` is `true`.

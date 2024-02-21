@@ -10,6 +10,10 @@ trait Type extends LLVMObject {
     new values.Value { val handle = h }
   }
 
+  /** The LLVM identifier of this type. */
+  def kind: TypeKind =
+    new TypeKind(LLVM.TypeGetKind(handle))
+
   override def toString(): String =
     LLVM.TypeDescription(handle, false)
 

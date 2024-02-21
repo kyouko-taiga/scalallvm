@@ -110,6 +110,13 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TypeDescription(
   return e->NewStringUTF(result.c_str());
 }
 
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_TypeGetKind(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Type>(sh);
+  return self->getTypeID();
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ArrayTypeCreateInContext(
   JNIEnv*, jobject, jint count, jlong element_h, jlong context_h
 ) {
@@ -132,6 +139,12 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ArrayTypeElement(
   return as_handle(self->getElementType());
 }
 
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_ArrayTypeKind(
+  JNIEnv*, jobject
+) {
+  return llvm::Type::TypeID::ArrayTyID;
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_DoubleTypeInContext(
   JNIEnv*, jobject, jlong context_h
 ) {
@@ -139,11 +152,23 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_DoubleTypeInContext(
   return as_handle(llvm::Type::getDoubleTy(*context));
 }
 
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_DoubleTypeKind(
+  JNIEnv*, jobject
+) {
+  return llvm::Type::TypeID::DoubleTyID;
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FloatTypeInContext(
   JNIEnv*, jobject, jlong context_h
 ) {
   auto* context = as_pointer<llvm::LLVMContext>(context_h);
   return as_handle(llvm::Type::getFloatTy(*context));
+}
+
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_FloatTypeKind(
+  JNIEnv*, jobject
+) {
+ return llvm::Type::TypeID::FloatTyID;
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionType(
@@ -154,6 +179,12 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionType(
     return llvm::FunctionType::get(r, ps, false);
   });
   return as_handle(t);
+}
+
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_FunctionTypeKind(
+  JNIEnv*, jobject
+) {
+  return llvm::Type::TypeID::FunctionTyID;
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionTypeParameterAt(
@@ -184,6 +215,12 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext(
   return as_handle(llvm::IntegerType::get(*c, bit_width));
 }
 
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_IntegerTypeKind(
+  JNIEnv*, jobject
+) {
+  return llvm::Type::TypeID::IntegerTyID;
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_PointerTypeInContext(
   JNIEnv*, jobject, jint space, jlong context_h
 ) {
@@ -196,6 +233,12 @@ JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_PointerTypeGetAddressSpace(
 ) {
   auto* self = as_pointer<llvm::PointerType>(sh);
   return self->getAddressSpace();
+}
+
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_PointerTypeKind(
+  JNIEnv*, jobject
+) {
+  return llvm::Type::TypeID::PointerTyID;
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeCreateNominalInContext(
@@ -252,6 +295,12 @@ JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StructTypeIsPacked(
   return self->isPacked();
 }
 
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_StructTypeKind(
+  JNIEnv*, jobject
+) {
+  return llvm::Type::TypeID::StructTyID;
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeMemberAt(
   JNIEnv *, jobject, jlong sh, jint p
 ) {
@@ -271,6 +320,12 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_VoidTypeInContext(
 ) {
   auto* c = as_pointer<llvm::LLVMContext>(context_h);
   return as_handle(llvm::Type::getVoidTy(*c));
+}
+
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_VoidTypeKind(
+  JNIEnv*, jobject
+) {
+  return llvm::Type::TypeID::VoidTyID;
 }
 
 JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ValueDescription(

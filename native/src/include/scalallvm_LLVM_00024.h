@@ -73,6 +73,14 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TypeDescription
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     TypeGetKind
+ * Signature:  (J)B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_TypeGetKind
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ArrayTypeCreateInContext
  * Signature:  (IJJ)J
  */
@@ -97,11 +105,27 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ArrayTypeElement
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     ArrayTypeKind
+ * Signature:  ()B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_ArrayTypeKind
+  (JNIEnv *, jobject);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     DoubleTypeInContext
  * Signature:  (J)J
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_DoubleTypeInContext
   (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DoubleTypeKind
+ * Signature:  ()B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_DoubleTypeKind
+  (JNIEnv *, jobject);
 
 /*
  * Class:      scalallvm_LLVM_00024
@@ -113,11 +137,27 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FloatTypeInContext
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     FloatTypeKind
+ * Signature:  ()B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_FloatTypeKind
+  (JNIEnv *, jobject);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     FunctionType
  * Signature:  ([JJ)J
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionType
   (JNIEnv *, jobject, jlongArray, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionTypeKind
+ * Signature:  ()B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_FunctionTypeKind
+  (JNIEnv *, jobject);
 
 /*
  * Class:      scalallvm_LLVM_00024
@@ -153,11 +193,27 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_IntTypeInContext
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     IntegerTypeKind
+ * Signature:  ()B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_IntegerTypeKind
+  (JNIEnv *, jobject);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     PointerTypeInContext
  * Signature:  (IJ)J
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_PointerTypeInContext
   (JNIEnv *, jobject, jint, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     PointerTypeKind
+ * Signature:  ()B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_PointerTypeKind
+  (JNIEnv *, jobject);
 
 /*
  * Class:      scalallvm_LLVM_00024
@@ -217,6 +273,14 @@ JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StructTypeIsPacked
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     StructTypeKind
+ * Signature:  ()B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_StructTypeKind
+  (JNIEnv *, jobject);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     StructTypeMemberAt
  * Signature:  (JI)J
  */
@@ -238,6 +302,14 @@ JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_StructTypeMemberCount
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_VoidTypeInContext
   (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     VoidTypeKind
+ * Signature:  ()B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_VoidTypeKind
+  (JNIEnv *, jobject);
 
 /*
  * Class:      scalallvm_LLVM_00024
