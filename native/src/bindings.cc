@@ -1,4 +1,5 @@
-#include <iostream>
+#include <concepts>
+
 #include <llvm/ADT/APInt.h>
 #include <llvm/IR/Constants.h>
 #include <llvm/IR/LLVMContext.h>
@@ -18,8 +19,11 @@ T* as_pointer(jlong h) {
   return static_cast<T*>(reinterpret_cast<void*>(h));
 }
 
-template<typename T, typename R>
-auto with_pointers(JNIEnv* e, jlongArray handles, const auto& action) {
+/// Returns the result of calling `action` on `llvm::ArrayRef` of pointers converted as pointers of
+/// `T` from the elements in `handles`.
+template<typename T, typename F>
+requires std::invocable<F, llvm::ArrayRef<T*> const&>
+auto with_pointers(JNIEnv* e, jlongArray handles, F&& action) {
   jlong* h = e->GetLongArrayElements(handles, nullptr);
   auto c = e->GetArrayLength(handles);
   T* a[c];
@@ -175,7 +179,7 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionType(
   JNIEnv* e, jobject, jlongArray parameters_h, jlong return_type_h
 ) {
   auto* r = as_pointer<llvm::Type>(return_type_h);
-  auto* t = with_pointers<llvm::Type, llvm::FunctionType*>(e, parameters_h, [=](auto ps) {
+  auto* t = with_pointers<llvm::Type>(e, parameters_h, [=](auto ps) {
     return llvm::FunctionType::get(r, ps, false);
   });
   return as_handle(t);
@@ -247,7 +251,7 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeCreateNominalInConte
   auto* context = as_pointer<llvm::LLVMContext>(context_h);
   const char* n = e->GetStringUTFChars(name, NULL);
   auto* t = llvm::StructType::create(*context, n);
-  with_pointers<llvm::Type, void>(e, members, [=](auto ms) {
+  with_pointers<llvm::Type>(e, members, [=](auto ms) {
     t->setBody(ms, is_packed);
   });
   return as_handle(t);
@@ -257,7 +261,7 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StructTypeCreateStructuralInCo
   JNIEnv* e, jobject, jlongArray members, jboolean is_packed, jlong context_h
 ) {
   auto* context = as_pointer<llvm::LLVMContext>(context_h);
-  auto* t = with_pointers<llvm::Type, llvm::StructType*>(e, members, [=](auto ms) {
+  auto* t = with_pointers<llvm::Type>(e, members, [=](auto ms) {
     return llvm::StructType::get(*context, ms, is_packed);
   });
   return as_handle(t);
@@ -357,7 +361,7 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantArray(
   JNIEnv* e, jobject, jlong element_h, jlongArray members_h
 ) {
   auto* element = as_pointer<llvm::Type>(element_h);
-  auto* result = with_pointers<llvm::Constant, llvm::ConstantArray*>(e, members_h, [=](auto ms) {
+  auto* result = with_pointers<llvm::Constant>(e, members_h, [=](auto ms) {
     auto* a = llvm::ArrayType::get(element, ms.size());
     return llvm::ConstantArray::get(a, ms);
   });
@@ -428,7 +432,7 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStruct(
   JNIEnv* e, jobject, jlong type_h, jlongArray members_h
 ) {
   auto* s = as_pointer<llvm::StructType>(type_h);
-  auto* t = with_pointers<llvm::Constant, llvm::ConstantStruct*>(e, members_h, [=](auto ms) {
+  auto* t = with_pointers<llvm::Constant>(e, members_h, [=](auto ms) {
     return llvm::ConstantStruct::get(s, ms);
   });
   return as_handle(t);
