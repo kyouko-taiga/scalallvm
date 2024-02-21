@@ -63,6 +63,10 @@ object StructType {
 
   /** Returns the type of a struct structurally identified in `context` by its `members`, which
    *  are packed iff `packed` is true.
+   *
+   *  @param members The types of the members in the struct.
+   *  @param packed `true` iff the representation of the struct is packed.
+   *  @param context The context in which the type is created.
    */
   def structural(
       members: Seq[Type], packed: Boolean = false
@@ -75,7 +79,7 @@ object StructType {
   /** A view on the members of a struct type.
    *
    *  @param base The struct type containing the members in `this`.
-  */
+   */
   final class Members(val base: StructType) extends ArrayView[Type] {
 
     /** The position of the first element in this view. */
