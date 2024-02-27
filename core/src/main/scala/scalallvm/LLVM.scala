@@ -119,7 +119,7 @@ object LLVM {
 
   @native def ConstantDouble(tpe: Handle, value: Double): Handle
 
-  @native def ConstantPoison(tpw: Handle): Handle
+  @native def ConstantPoison(tpe: Handle): Handle
 
   @native def ConstantStringInContext(
       text: String, nullTerminated: Boolean, context: Handle
