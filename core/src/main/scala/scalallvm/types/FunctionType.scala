@@ -1,7 +1,7 @@
 package scalallvm
 package types
 
-import support.ArrayView
+import support.ContainerView
 
 /** The type of a function in LLVM IR. */
 final class FunctionType private (val handle: LLVM.Handle) extends Type {
@@ -34,15 +34,16 @@ object FunctionType {
    *
    *  @param base The function type containing the members in `this`.
   */
-  final class Parameters(val base: FunctionType) extends ArrayView[Type] {
+  final class Parameters(val base: FunctionType) extends ContainerView[Type, Int] {
 
-    /** The position of the first element in this view. */
     val startPosition: Int = 0
 
-    /** The position after the last element in this view. */
-    val endPosition: Int = LLVM.FunctionTypeParameterCount(base.handle)
+    val endPosition: Int =
+      LLVM.FunctionTypeParameterCount(base.handle)
 
-    /** Accesses the element at position `p`. */
+    def positionAfter(p: Int): Int =
+      p + 1
+
     def elementAt(p: Int): Type = {
       require((startPosition <= p) && (p < endPosition))
       new Type { val handle = LLVM.FunctionTypeParameterAt(base.handle, p) }

@@ -1,7 +1,7 @@
 package scalallvm
 package values
 
-import support.ArrayView
+import support.ContainerView
 import types.StructType
 
 /** A constant struct value in LLVM IR. */
@@ -23,12 +23,15 @@ object Struct {
    *
    *  @param base The struct containing the members in `this`.
    */
-  final class Members(val base: Struct) extends ArrayView[Constant] {
+  final class Members(val base: Struct) extends ContainerView[Constant, Int] {
 
     val startPosition: Int = 0
 
     val endPosition: Int =
       StructType(base.tpe).get.members.endPosition
+
+    def positionAfter(p: Int): Int =
+      p + 1
 
     def elementAt(p: Int): Constant = {
       require((startPosition <= p) && (p < endPosition))

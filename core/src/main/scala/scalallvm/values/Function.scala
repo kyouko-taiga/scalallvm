@@ -1,7 +1,7 @@
 package scalallvm
 package values
 
-import support.ArrayView
+import support.ContainerView
 
 /** A function in LLVM IR. */
 final class Function private[scalallvm] (val handle: LLVM.Handle) extends Constant {
@@ -24,15 +24,15 @@ object Function {
    *
    *  @param base The function type containing the members in `this`.
   */
-  final class Parameters(val base: Function) extends ArrayView[Parameter] {
+  final class Parameters(val base: Function) extends ContainerView[Parameter, Int] {
 
-    /** The position of the first element in this view. */
     val startPosition: Int = 0
 
-    /** The position after the last element in this view. */
     val endPosition: Int = LLVM.FunctionParameterCount(base.handle)
 
-    /** Accesses the element at position `p`. */
+    def positionAfter(p: Int): Int =
+      p + 1
+
     def elementAt(p: Int): Parameter = {
       require((startPosition <= p) && (p < endPosition))
       new Parameter(LLVM.FunctionParameterAt(base.handle, p))

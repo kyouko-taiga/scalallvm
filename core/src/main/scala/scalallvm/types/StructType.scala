@@ -1,7 +1,7 @@
 package scalallvm
 package types
 
-import support.ArrayView
+import support.ContainerView
 
 /** The type of a struct in LLVM IR.
  *
@@ -80,15 +80,16 @@ object StructType {
    *
    *  @param base The struct type containing the members in `this`.
    */
-  final class Members(val base: StructType) extends ArrayView[Type] {
+  final class Members(val base: StructType) extends ContainerView[Type, Int] {
 
-    /** The position of the first element in this view. */
     val startPosition: Int = 0
 
-    /** The position after the last element in this view. */
-    val endPosition: Int = LLVM.StructTypeMemberCount(base.handle)
+    val endPosition: Int =
+      LLVM.StructTypeMemberCount(base.handle)
 
-    /** Accesses the element at position `p`. */
+    def positionAfter(p: Int): Int =
+      p + 1
+
     def elementAt(p: Int): Type = {
       require((startPosition <= p) && (p < endPosition))
       new Type { val handle = LLVM.StructTypeMemberAt(base.handle, p) }

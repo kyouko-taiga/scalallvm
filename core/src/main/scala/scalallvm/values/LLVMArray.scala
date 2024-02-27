@@ -1,7 +1,7 @@
 package scalallvm
 package values
 
-import support.ArrayView
+import support.ContainerView
 import types.{ArrayType, Type}
 
 /** A constant array in LLVM IR. */
@@ -40,12 +40,15 @@ object LLVMArray {
    *
    *  @param base The array containing the members in `this`.
    */
-  final class Members(val base: LLVMArray) extends ArrayView[Constant] {
+  final class Members(val base: LLVMArray) extends ContainerView[Constant, Int] {
 
     val startPosition: Int = 0
 
     val endPosition: Int =
       base.length
+
+    def positionAfter(p: Int): Int =
+      p + 1
 
     def elementAt(p: Int): Constant = {
       require((startPosition <= p) && (p < endPosition))
