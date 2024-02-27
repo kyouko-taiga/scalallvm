@@ -98,6 +98,8 @@ object LLVM {
 
   @native def ValueDescription(self: Handle, isForDebug: Boolean): String
 
+  @native def ValueGetName(self: Handle): String
+
   @native def ValueGetType(self: Handle): Handle
 
   @native def ConstantAggregateMemberAt(self: Handle, position: Int): Handle
@@ -126,6 +128,20 @@ object LLVM {
   @native def ConstantStruct(tpe: Handle, members: Array[Handle]): Handle
 
   @native def ConstantUndefined(tpe: Handle): Handle
+
+  // --- Functions ------------------------------------------------------------
+
+  @native def FunctionCreateInModule(
+      n: String, tpe: Handle, linkage: Byte, space: Int, module: Handle
+  ): Handle
+
+  @native def FunctionGetByNameInModule(n: String, module: Handle): Handle
+
+  @native def FunctionParameterAt(self: Handle, position: Int): Handle
+
+  @native def FunctionParameterCount(self: Handle): Int
+
+  @native def LinkageExternal(): Byte
 
   // --- Support --------------------------------------------------------------
 

@@ -321,6 +321,14 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ValueDescription
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     ValueGetName
+ * Signature:  (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ValueGetName
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ValueGetType
  * Signature:  (J)J
  */
@@ -422,6 +430,46 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStruct
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantUndefined
   (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionCreateInModule
+ * Signature:  (Ljava/lang/String;JBIJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionCreateInModule
+  (JNIEnv *, jobject, jstring, jlong, jbyte, jint, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionGetByNameInModule
+ * Signature:  (Ljava/lang/String;J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionGetByNameInModule
+  (JNIEnv *, jobject, jstring, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionParameterAt
+ * Signature:  (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterAt
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionParameterCount
+ * Signature:  (J)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_FunctionParameterCount
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     LinkageExternal
+ * Signature:  ()B
+ */
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_LinkageExternal
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

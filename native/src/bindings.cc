@@ -61,6 +61,11 @@ llvm::APInt arbitrary_precision_integer(
   return result;
 }
 
+/// Returns an instance of `llvm::GlobalValue::LinkageTypes` from its raw value.
+llvm::GlobalValue::LinkageTypes linkage(jbyte raw_value) {
+  return static_cast<llvm::GlobalValue::LinkageTypes>(raw_value);
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ContextCreate(
   JNIEnv*, jobject
 ) {
@@ -354,6 +359,13 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ValueDescription(
   return e->NewStringUTF(result.c_str());
 }
 
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ValueGetName(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Value>(sh);
+  return e->NewStringUTF(self->getName().str().c_str());
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ValueGetType(
   JNIEnv*, jobject, jlong sh
 ) {
@@ -454,4 +466,58 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantUndefined(
 ) {
   auto* t = as_pointer<llvm::Type>(type_h);
   return as_handle(llvm::UndefValue::get(t));
+}
+
+/// Creates a function in a module using `llvm::Function::Create`.
+///
+/// - Parameters:
+///   - name: The name of the function.
+///   - type_h: A handle to a `llvm::FunctionType`.
+///   - linkage: The linkage of the function.
+///   - space: The address space in which the function is created.
+///   - module_h: A handle to a `llvm::Module`.
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionCreateInModule(
+  JNIEnv* e, jobject, jstring name, jlong type_h, jbyte linkage_r, jint space, jlong module_h
+) {
+  auto* m = as_pointer<llvm::Module>(module_h);
+  auto* t = as_pointer<llvm::FunctionType>(type_h);
+  auto l = linkage(linkage_r);
+  auto* result = with_utf8(e, name, [=](auto n) {
+    return llvm::Function::Create(t, l, space, n, m);
+  });
+  return as_handle(result);
+  return 0;
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionGetByNameInModule(
+  JNIEnv* e, jobject, jstring name, jlong module_h
+) {
+  auto* m = as_pointer<llvm::Module>(module_h);
+  auto* f = with_utf8(e, name, [=](auto n) {
+    return m->getFunction(n);
+  });
+  return (f != nullptr) ? as_handle(f) : 0;
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterAt(
+  JNIEnv*, jobject, jlong sh, jint p
+) {
+  auto* self = as_pointer<llvm::Function>(sh);
+  auto a = self->arg_begin();
+  auto i = 0;
+  while (i < p) { ++i; ++a; }
+  return as_handle(&(*a));
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_FunctionParameterCount(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Function>(sh);
+  return self->arg_size();
+}
+
+JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_LinkageExternal(
+  JNIEnv*, jobject
+) {
+  return llvm::GlobalValue::LinkageTypes::ExternalLinkage;
 }

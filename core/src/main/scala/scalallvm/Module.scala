@@ -1,5 +1,8 @@
 package scalallvm
 
+import types.FunctionType
+import values.Function
+
 /** The top-level structure in an LLVM program. */
 final class Module private (val handle: LLVM.Handle) extends LLVMObject with Disposable {
 
@@ -18,6 +21,25 @@ final class Module private (val handle: LLVM.Handle) extends LLVMObject with Dis
   /** A textual description of this module's IR. */
   def description: String =
     LLVM.ModuleDescription(handle)
+
+  /** Returns a function named `n` and having type `t`, declaring it if it doesn't exist. */
+  def declareFunction(
+      n: String, t: FunctionType,
+      l: Linkage = Linkage.external,
+      s: AddressSpace = AddressSpace.default
+  ): Function =
+    function(n) match {
+      case Some(f) => f
+      case None =>
+        new Function(LLVM.FunctionCreateInModule(n, t.handle, l.rawValue, s.rawValue, handle))
+    }
+
+  /** Returns the function named `n` in this module, if any. */
+  def function(n: String): Option[Function] =
+    LLVM.FunctionGetByNameInModule(n, handle) match {
+      case 0 => None
+      case h => Some(new Function(h))
+    }
 
   def dispose(): Unit =
     LLVM.ModuleDispose(handle)
