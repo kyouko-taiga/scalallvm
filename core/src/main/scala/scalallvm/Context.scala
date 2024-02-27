@@ -1,6 +1,10 @@
 package scalallvm
 
-/** An opaque object that owns core LLVM data structures. */
+/** An opaque object that owns core LLVM data structures.
+ *
+ * A single context is not thread safe but different contexts can execute on different threads
+ * simultaneously.
+ */
 final class Context private (val handle: LLVM.Handle) extends LLVMObject with Disposable {
 
   /** Creates a new instance. */
