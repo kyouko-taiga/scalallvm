@@ -3,19 +3,14 @@ import scalallvm.{Context, Module}
 class ModuleTests extends munit.FunSuite {
 
   test("getName") {
-    withNewModule("koala") { (m) => assertEquals(m.name, "koala") }
+    Module.withNew("koala") { (_, m) => assertEquals(m.name, "koala") }
   }
 
   test("setName") {
-    withNewModule("koala") { (m) =>
+    Module.withNew("koala") { (_, m) =>
       m.name = "camel"
       assertEquals(m.name, "camel")
     }
   }
-
-  private def withNewModule[R](n: String = "test")(action: Module => R): R =
-    Context.withNew { (llvm) =>
-      llvm.withNewModule(n)(action)
-    }
 
 }
