@@ -449,11 +449,27 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionGetByNameInModule
 
 /*
  * Class:      scalallvm_LLVM_00024
- * Method:     FunctionParameterAt
- * Signature:  (JI)J
+ * Method:     FunctionParameterAfter
+ * Signature:  (JJ)J
  */
-JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterAt
-  (JNIEnv *, jobject, jlong, jint);
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterAfter
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionParameterBegin
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterBegin
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionParameterEnd
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterEnd
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:      scalallvm_LLVM_00024

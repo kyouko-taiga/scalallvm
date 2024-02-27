@@ -137,9 +137,13 @@ object LLVM {
 
   @native def FunctionGetByNameInModule(n: String, module: Handle): Handle
 
-  @native def FunctionParameterAt(self: Handle, position: Int): Handle
+  @native def FunctionParameterAfter(self: Handle, position: Handle): Handle
+
+  @native def FunctionParameterBegin(self: Handle): Handle
 
   @native def FunctionParameterCount(self: Handle): Int
+
+  @native def FunctionParameterEnd(self: Handle): Handle
 
   @native def LinkageExternal(): Byte
 

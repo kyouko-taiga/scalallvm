@@ -499,14 +499,18 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionGetByNameInModule(
   return (f != nullptr) ? as_handle(f) : 0;
 }
 
-JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterAt(
-  JNIEnv*, jobject, jlong sh, jint p
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterAfter(
+  JNIEnv*, jobject, jlong, jlong p
+) {
+  auto* a = as_pointer<llvm::Argument>(p);
+  return as_handle(++a);
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterBegin(
+  JNIEnv*, jobject, jlong sh
 ) {
   auto* self = as_pointer<llvm::Function>(sh);
-  auto a = self->arg_begin();
-  auto i = 0;
-  while (i < p) { ++i; ++a; }
-  return as_handle(&(*a));
+  return as_handle(self->arg_begin());
 }
 
 JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_FunctionParameterCount(
@@ -514,6 +518,13 @@ JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_FunctionParameterCount(
 ) {
   auto* self = as_pointer<llvm::Function>(sh);
   return self->arg_size();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterEnd(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Function>(sh);
+  return as_handle(self->arg_end());
 }
 
 JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_LinkageExternal(
