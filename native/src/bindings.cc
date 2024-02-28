@@ -13,6 +13,11 @@ jlong as_handle(void* p) {
   return reinterpret_cast<uintptr_t>(p);
 }
 
+/// Converts `p` into a nullable Java handle.
+jlong as_nullable_handle(void* p) {
+  return (p == nullptr) ? 0 : as_handle(p);
+}
+
 /// Unsafely converts the Java handle `h` to a pointer of type `T`.
 template<typename T>
 T* as_pointer(jlong h) {
@@ -486,17 +491,36 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionCreateInModule(
     return llvm::Function::Create(t, l, space, n, m);
   });
   return as_handle(result);
-  return 0;
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionBasicBlockEntry(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Function>(sh);
+  return (self->size() > 0) ? as_handle(&(self->getEntryBlock())) : 0;
+}
+
+JNIEXPORT jlongArray JNICALL Java_scalallvm_LLVM_00024_FunctionBasicBlocks(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Function>(sh);
+  jlongArray result = e->NewLongArray(self->size());
+
+  int i = 0;
+  jlong handles[self->size()];
+  for (auto& b : *self) { handles[i++] = as_handle(&b); }
+  e->SetLongArrayRegion(result, 0, self->size(), handles);
+
+  return result;
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionGetByNameInModule(
   JNIEnv* e, jobject, jstring name, jlong module_h
 ) {
   auto* m = as_pointer<llvm::Module>(module_h);
-  auto* f = with_utf8(e, name, [=](auto n) {
-    return m->getFunction(n);
+  return with_utf8(e, name, [=](auto n) {
+    return as_nullable_handle(m->getFunction(n));
   });
-  return (f != nullptr) ? as_handle(f) : 0;
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterAfter(
