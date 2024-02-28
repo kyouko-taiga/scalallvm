@@ -7,10 +7,6 @@ import scala.collection.immutable.ArraySeq
 /** A function in LLVM IR. */
 final class Function private[scalallvm] (val handle: LLVM.Handle) extends Constant {
 
-  /** The name of this function. */
-  def name: String =
-    LLVM.ValueGetName(handle)
-
   /** The parameters of the function. */
   def parameters: Function.Parameters =
     new Function.Parameters(this)
