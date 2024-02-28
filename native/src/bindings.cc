@@ -4,6 +4,7 @@
 #include <llvm/IR/Constants.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
+#include <llvm/IR/Verifier.h>
 #include <llvm/Support/raw_ostream.h>
 
 #include "scalallvm_LLVM_00024.h"
@@ -378,6 +379,24 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ValueGetType(
   return as_handle(self->getType());
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BasicBlockCreateInParent(
+  JNIEnv* e, jobject, jstring name, jlong next, jlong parent_h
+) {
+  auto* parent = as_pointer<llvm::Function>(parent_h);
+  auto* result = with_utf8(e, name, [=](auto n) {
+    auto* b = (next != 0) ? as_pointer<llvm::BasicBlock>(next) : nullptr;
+    return llvm::BasicBlock::Create(parent->getContext(), n, parent, b);
+  });
+  return as_handle(result);
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BasicBlockGetParent(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::BasicBlock>(sh);
+  return as_handle(self->getParent());
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantAggregateMemberAt(
   JNIEnv*, jobject, jlong sh, jint p
 ) {
@@ -549,6 +568,19 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterEnd(
 ) {
   auto* self = as_pointer<llvm::Function>(sh);
   return as_handle(self->arg_end());
+}
+
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_FunctionVerifiy(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Function>(sh);
+  std::string s;
+  llvm::raw_string_ostream o(s);
+  if (llvm::verifyFunction(*self, &o)) {
+    return e->NewStringUTF(s.c_str());
+  } else {
+    return 0;
+  }
 }
 
 JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_LinkageExternal(

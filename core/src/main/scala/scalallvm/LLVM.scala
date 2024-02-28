@@ -102,6 +102,10 @@ object LLVM {
 
   @native def ValueGetType(self: Handle): Handle
 
+  @native def BasicBlockCreateInParent(name: String, next: Handle, parent: Handle): Handle
+
+  @native def BasicBlockGetParent(self: Handle): Handle
+
   @native def ConstantAggregateMemberAt(self: Handle, position: Int): Handle
 
   @native def ConstantArray(element: Handle, members: Array[Handle]): Handle
@@ -135,6 +139,10 @@ object LLVM {
       n: String, tpe: Handle, linkage: Byte, space: Int, module: Handle
   ): Handle
 
+  @native def FunctionBasicBlockEntry(self: Handle): Handle
+
+  @native def FunctionBasicBlocks(self: Handle): Array[Handle]
+
   @native def FunctionGetByNameInModule(n: String, module: Handle): Handle
 
   @native def FunctionParameterAfter(self: Handle, position: Handle): Handle
@@ -144,6 +152,8 @@ object LLVM {
   @native def FunctionParameterCount(self: Handle): Int
 
   @native def FunctionParameterEnd(self: Handle): Handle
+
+  @native def FunctionVerifiy(self: Handle): String
 
   @native def LinkageExternal(): Byte
 

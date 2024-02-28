@@ -2,6 +2,7 @@ package scalallvm
 package values
 
 import support.ContainerView
+import scala.collection.immutable.ArraySeq
 
 /** A function in LLVM IR. */
 final class Function private[scalallvm] (val handle: LLVM.Handle) extends Constant {
@@ -14,16 +15,58 @@ final class Function private[scalallvm] (val handle: LLVM.Handle) extends Consta
   def parameters: Function.Parameters =
     new Function.Parameters(this)
 
+  /** The entry of the function, if any. */
+  def entry: Option[BasicBlock] =
+    LLVM.FunctionBasicBlockEntry(handle) match {
+      case 0 => None
+      case h => Some(new BasicBlock(h))
+    }
+
+  /** The basic blocks in the function. */
+  def basicBlocks: ArraySeq[BasicBlock] =
+    LLVM.FunctionBasicBlocks(handle).map((h) => new BasicBlock(h)).to(ArraySeq)
+
+  /** Adds a new basic block at the end of this function and returns it.
+   *
+   *  @param name The name of the block. A default value is generated if `name` is empty. If `name`
+   *         already identifies a value in `this`, a fresh name is created using `name` as a prefix.
+   */
+  def appendBasicBlock(name: String = ""): BasicBlock = {
+    val n = if (name.isEmpty()) { "bb" } else { name }
+    new BasicBlock(LLVM.BasicBlockCreateInParent(n, 0, handle))
+  }
+
+  /** Adds a new basic block before `position` and returns it.
+   *
+   *  @param name The name of the block. A default value is generated if `name` is empty. If `name`
+   *         already identifies a value in `this`, a fresh name is created using `name` as a prefix.
+   */
+  def insertBasicBlock(name: String = "", position: BasicBlock): BasicBlock = {
+    require(position.parent == this)
+    val n = if (name.isEmpty()) { "bb" } else { name }
+    new BasicBlock(LLVM.BasicBlockCreateInParent(n, position.handle, handle))
+  }
+
+  /** Checks the function for errors and returns `Some(s)` if one was found, where `s` is a message
+   *  describing that error. Otherwise, returns `None`.
+   */
+  def errors(): Option[String] =
+    LLVM.FunctionVerifiy(handle) match {
+      case null => None
+      case s => Some(s)
+    }
+
 }
 
 object Function {
 
+  /** A parameter (aka formal argument) of a function. */
   final class Parameter private[Function] (val handle: LLVM.Handle) extends Value
 
   /** A view on the parameters of a function.
    *
-   *  @param base The function type containing the members in `this`.
-  */
+   *  @param base The function containing the members in `this`.
+   */
   final class Parameters(val base: Function) extends ContainerView[Parameter, LLVM.Handle] {
 
     // Note: We use handles as positions because iterators over an IR function's parameters are

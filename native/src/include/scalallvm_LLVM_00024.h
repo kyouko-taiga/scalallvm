@@ -337,6 +337,22 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ValueGetType
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     BasicBlockCreateInParent
+ * Signature:  (Ljava/lang/String;JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BasicBlockCreateInParent
+  (JNIEnv *, jobject, jstring, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     BasicBlockGetParent
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BasicBlockGetParent
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ConstantAggregateMemberAt
  * Signature:  (JI)J
  */
@@ -441,6 +457,22 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionCreateInModule
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionBasicBlockEntry
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionBasicBlockEntry
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionBasicBlocks
+ * Signature:  (J)[J
+ */
+JNIEXPORT jlongArray JNICALL Java_scalallvm_LLVM_00024_FunctionBasicBlocks
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     FunctionGetByNameInModule
  * Signature:  (Ljava/lang/String;J)J
  */
@@ -465,6 +497,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterBegin
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     FunctionParameterCount
+ * Signature:  (J)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_FunctionParameterCount
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     FunctionParameterEnd
  * Signature:  (J)J
  */
@@ -473,10 +513,10 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FunctionParameterEnd
 
 /*
  * Class:      scalallvm_LLVM_00024
- * Method:     FunctionParameterCount
- * Signature:  (J)I
+ * Method:     FunctionVerifiy
+ * Signature:  (J)Ljava/lang/String;
  */
-JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_FunctionParameterCount
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_FunctionVerifiy
   (JNIEnv *, jobject, jlong);
 
 /*
