@@ -41,3 +41,13 @@ final class Alloca private[scalallvm] (val handle: LLVM.Handle) extends Instruct
   }
 
 }
+
+object Alloca extends ValueConversion[Alloca] {
+
+  def apply(source: Value): Option[Alloca] =
+    LLVM.AllocaFromValue(source.handle) match {
+      case 0 => None
+      case h => Some(new Alloca(h))
+    }
+
+}
