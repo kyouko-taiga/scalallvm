@@ -26,6 +26,18 @@ object LLVM {
 
   @native def ModuleSetName(self: Handle, name: String): Unit
 
+  // --- IRBuilder ------------------------------------------------------------
+
+  @native def InstructionBuilderCreateInContext(context: Handle): Handle
+
+  @native def InstructionBuilderDispose(self: Handle): Unit
+
+  @native def InstructionBuilderMakeAlloca(
+    self: Handle, tpe: Handle, space: Int, size: Handle, name: String
+  ): Handle
+
+  @native def InstructionBuilderPositionAtEndOfBlock(self: Handle, block: Handle): Unit
+
   // --- Types ----------------------------------------------------------------
 
   @native def TypeDescription(self: Handle, isForDebug: Boolean): String
@@ -101,6 +113,20 @@ object LLVM {
   @native def ValueGetName(self: Handle): String
 
   @native def ValueGetType(self: Handle): Handle
+
+  @native def AllocaGetAddressSpace(self: Handle): Int
+
+  @native def AllocaGetAlignment(self: Handle): Long
+
+  @native def AllocaGetAllocatedType(self: Handle): Handle
+
+  @native def AllocaGetAllocationCount(self: Handle): Handle
+
+  @native def AllocaIsStatic(self: Handle): Boolean
+
+  @native def AllocaFromValue(source: Handle): Handle
+
+  @native def AllocaSetAlignment(self: Handle, a: Long): Unit
 
   @native def BasicBlockCreateInParent(name: String, next: Handle, parent: Handle): Handle
 

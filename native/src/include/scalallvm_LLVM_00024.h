@@ -65,6 +65,38 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderCreateInContext
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderCreateInContext
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderDispose
+ * Signature:  (J)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderDispose
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeAlloca
+ * Signature:  (JJIJLjava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeAlloca
+  (JNIEnv *, jobject, jlong, jlong, jint, jlong, jstring);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderPositionAtEndOfBlock
+ * Signature:  (JJ)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderPositionAtEndOfBlock
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     TypeDescription
  * Signature:  (JZ)Ljava/lang/String;
  */
@@ -334,6 +366,62 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ValueGetName
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ValueGetType
   (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     AllocaGetAddressSpace
+ * Signature:  (J)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_AllocaGetAddressSpace
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     AllocaGetAlignment
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_AllocaGetAlignment
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     AllocaGetAllocatedType
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_AllocaGetAllocatedType
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     AllocaGetAllocationCount
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_AllocaGetAllocationCount
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     AllocaIsStatic
+ * Signature:  (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_AllocaIsStatic
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     AllocaFromValue
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_AllocaFromValue
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     AllocaSetAlignment
+ * Signature:  (JJ)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_AllocaSetAlignment
+  (JNIEnv *, jobject, jlong, jlong);
 
 /*
  * Class:      scalallvm_LLVM_00024

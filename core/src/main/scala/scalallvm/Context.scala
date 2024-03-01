@@ -21,6 +21,16 @@ final class Context private (val handle: LLVM.Handle) extends LLVMObject with Di
     try action(instance) finally instance.dispose()
   }
 
+  /** Returns the result of calling `action` with a new instruction builder.
+   *
+   *  The argument to `action` is only valid for the duration of action's `call`. It is undefined
+   *  behavior to let it escape in any way.
+   */
+  def withNewBuilder[R](action: InstructionBuilder => R): R = {
+    val instance = new InstructionBuilder(this)
+    try action(instance) finally instance.dispose()
+  }
+
   /** LLVM's `void` type. */
   def void = new types.VoidType(this)
 

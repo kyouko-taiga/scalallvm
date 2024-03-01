@@ -2,6 +2,7 @@
 
 #include <llvm/ADT/APInt.h>
 #include <llvm/IR/Constants.h>
+#include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
 #include <llvm/IR/Verifier.h>
@@ -23,6 +24,11 @@ jlong as_nullable_handle(void* p) {
 template<typename T>
 T* as_pointer(jlong h) {
   return static_cast<T*>(reinterpret_cast<void*>(h));
+}
+
+template<typename T>
+T* as_nullable_pointer(jlong h) {
+  return (h == 0) ?  nullptr : static_cast<T*>(reinterpret_cast<void*>(h));
 }
 
 /// Returns the result of calling `action` on `llvm::ArrayRef` of pointers converted as pointers of
@@ -84,6 +90,17 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ContextDispose(
   delete as_pointer<llvm::LLVMContext>(sh);
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeAlloca(
+  JNIEnv* e, jobject, jlong sh, jlong type_h, jint space, jlong size_h, jstring name
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* type = as_pointer<llvm::Type>(type_h);
+  auto* size = as_nullable_pointer<llvm::Value>(size_h);
+  return with_utf8(e, name, [=](auto n) {
+    return as_handle(self->CreateAlloca(type, space, size, n));
+  });
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ModuleCreateWithNameInContext(
   JNIEnv* e, jobject, jstring name, jlong context_h
 ) {
@@ -124,6 +141,27 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName(
     self->setModuleIdentifier(n);
     return std::monostate{};
   });
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderCreateInContext(
+  JNIEnv*, jobject, jlong context_h
+) {
+  auto* context = as_pointer<llvm::LLVMContext>(context_h);
+  return as_handle(new llvm::IRBuilder(*context));
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderDispose(
+  JNIEnv*, jobject, jlong sh
+) {
+  delete as_pointer<llvm::IRBuilderBase>(sh);
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderPositionAtEndOfBlock(
+  JNIEnv *, jobject, jlong sh, jlong block_h
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* block = as_pointer<llvm::BasicBlock>(block_h);
+  self->SetInsertPoint(block);
 }
 
 JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TypeDescription(
@@ -377,6 +415,55 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ValueGetType(
 ) {
   auto* self = as_pointer<llvm::Value>(sh);
   return as_handle(self->getType());
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_AllocaGetAddressSpace(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::AllocaInst>(sh);
+  return self->getAddressSpace();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_AllocaGetAlignment(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::AllocaInst>(sh);
+  return self->getAlign().value();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_AllocaGetAllocatedType(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::AllocaInst>(sh);
+  return as_handle(self->getAllocatedType());
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_AllocaGetAllocationCount(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::AllocaInst>(sh);
+  return as_handle(self->getArraySize());
+}
+
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_AllocaIsStatic(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::AllocaInst>(sh);
+  return self->isStaticAlloca();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_AllocaFromValue(
+  JNIEnv*, jobject, jlong source_h
+) {
+  auto* source = as_pointer<llvm::Value>(source_h);
+  return as_nullable_handle(llvm::dyn_cast<llvm::AllocaInst>(source));
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_AllocaSetAlignment(
+  JNIEnv *, jobject, jlong sh, jlong a
+) {
+  auto* self = as_pointer<llvm::AllocaInst>(sh);
+  self->setAlignment(llvm::Align(a));
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BasicBlockCreateInParent(
