@@ -1,19 +1,20 @@
 package values
 
-import scalallvm.{AddressSpace, Context, InstructionBuilder, Module}
-import scalallvm.types.FunctionType
+import scalallvm.AddressSpace
+
+import util.TestUtil
 
 class AllocaTests extends munit.FunSuite {
 
   test("isStatic") {
-    withBuilder { (llvm, b) =>
+    TestUtil.withBuilder { (llvm, b) =>
       val s = b.alloca(llvm.i64, size=Some(llvm.i64(2)))
       assert(s.isStatic)
     }
   }
 
   test("alignment") {
-    withBuilder { (llvm, b) =>
+    TestUtil.withBuilder { (llvm, b) =>
       val s = b.alloca(llvm.i64, size=Some(llvm.i64(2)))
       s.alignment = 16
       assertEquals(s.alignment, 16)
@@ -21,35 +22,23 @@ class AllocaTests extends munit.FunSuite {
   }
 
   test("allocatedType") {
-    withBuilder { (llvm, b) =>
+    TestUtil.withBuilder { (llvm, b) =>
       val s = b.alloca(llvm.i64, size=Some(llvm.i64(2)))
       assertEquals(s.allocatedType, llvm.i64)
     }
   }
 
   test("addressSpace") {
-    withBuilder { (llvm, b) =>
+    TestUtil.withBuilder { (llvm, b) =>
       val s = b.alloca(llvm.i64, size=Some(llvm.i64(2)))
       assertEquals(s.addressSpace, AddressSpace.default)
     }
   }
 
   test("allocationCount") {
-    withBuilder { (llvm, b) =>
+    TestUtil.withBuilder { (llvm, b) =>
       val s = b.alloca(llvm.i64, size=Some(llvm.i64(2)))
       assertEquals(s.allocationCount, llvm.i64(2))
-    }
-  }
-
-  private def withBuilder[R](action: (Context, InstructionBuilder) => R): R = {
-    Module.withNew("m") { (llvm, m) =>
-      val f = m.declareFunction("main", new FunctionType(Nil, llvm.i32))
-      val e = f.appendBasicBlock("entry")
-
-      llvm.withNewBuilder { (b) =>
-        b.positionAtEndOf(e)
-        action(llvm, b)
-      }
     }
   }
 
