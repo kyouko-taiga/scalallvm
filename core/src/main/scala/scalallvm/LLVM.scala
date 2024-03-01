@@ -205,6 +205,14 @@ object LLVM {
 
   @native def ConstantUndefined(tpe: Handle): Handle
 
+  @native def LoadGetAlignment(self: Handle): Long
+
+  @native def LoadIsVolatile(self: Handle): Boolean
+
+  @native def LoadFromValue(source: Handle): Handle
+
+  @native def LoadSetAlignment(self: Handle, a: Long): Unit
+
   @native def StoreGetAlignment(self: Handle): Long
 
   @native def StoreIsVolatile(self: Handle): Boolean

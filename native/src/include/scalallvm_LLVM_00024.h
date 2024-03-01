@@ -657,6 +657,38 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantUndefined
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     LoadGetAlignment
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_LoadGetAlignment
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     LoadIsVolatile
+ * Signature:  (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_LoadIsVolatile
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     LoadFromValue
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_LoadFromValue
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     LoadSetAlignment
+ * Signature:  (JJ)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_LoadSetAlignment
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     StoreGetAlignment
  * Signature:  (J)J
  */

@@ -726,6 +726,34 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantUndefined(
   return as_handle(llvm::UndefValue::get(t));
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_LoadGetAlignment(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::LoadInst>(sh);
+  return self->getAlign().value();
+}
+
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_LoadIsVolatile(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::LoadInst>(sh);
+  return self->isVolatile();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_LoadFromValue(
+  JNIEnv*, jobject, jlong source_h
+) {
+  auto* source = as_pointer<llvm::Value>(source_h);
+  return as_nullable_handle(llvm::dyn_cast<llvm::LoadInst>(source));
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_LoadSetAlignment(
+  JNIEnv *, jobject, jlong sh, jlong a
+) {
+  auto* self = as_pointer<llvm::LoadInst>(sh);
+  self->setAlignment(llvm::Align(a));
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StoreGetAlignment(
   JNIEnv*, jobject, jlong sh
 ) {

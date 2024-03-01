@@ -75,10 +75,10 @@ final class InstructionBuilder private (
   /** Creates a `load` with the given properties. */
   def load(
       source: Value, sourceType: Type, isVolatile: Boolean = false, name: String = ""
-  ): Instruction = {
+  ): values.Load = {
     val h = LLVM.InstructionBuilderMakeLoad(
       handle, source.handle, sourceType.handle, isVolatile, name)
-    new Instruction { val handle = h }
+    new values.Load(h)
   }
 
   /** Creates a `ret void`. */
