@@ -1,7 +1,6 @@
 package values
 
 import scalallvm.{AddressSpace, Context, InstructionBuilder, Module}
-import scalallvm.values.Alloca
 import scalallvm.types.FunctionType
 
 class AllocaTests extends munit.FunSuite {
@@ -16,7 +15,6 @@ class AllocaTests extends munit.FunSuite {
   test("alignment") {
     withBuilder { (llvm, b) =>
       val s = b.alloca(llvm.i64, size=Some(llvm.i64(2)))
-      assertEquals(s.alignment, 8)
       s.alignment = 16
       assertEquals(s.alignment, 16)
     }

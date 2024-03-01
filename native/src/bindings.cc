@@ -90,6 +90,13 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ContextDispose(
   delete as_pointer<llvm::LLVMContext>(sh);
 }
 
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderGetInsertionBlock(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  return as_nullable_handle(self->GetInsertBlock());
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeAlloca(
   JNIEnv* e, jobject, jlong sh, jlong type_h, jint space, jlong size_h, jstring name
 ) {
@@ -99,6 +106,118 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeAlloca(
   return with_utf8(e, name, [=](auto n) {
     return as_handle(self->CreateAlloca(type, space, size, n));
   });
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeBr(
+  JNIEnv*, jobject, jlong sh, jlong destination_h
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* destination = as_pointer<llvm::BasicBlock>(destination_h);
+  return as_handle(self->CreateBr(destination));
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeConditionalBr(
+  JNIEnv*, jobject, jlong sh, jlong condition_h, jlong success_h, jlong failure_h
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* c = as_pointer<llvm::Value>(condition_h);
+  auto* s = as_pointer<llvm::BasicBlock>(success_h);
+  auto* f = as_pointer<llvm::BasicBlock>(failure_h);
+  return as_handle(self->CreateCondBr(c, s, f));
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeGEP(
+  JNIEnv* e, jobject, jlong sh, jlong base_h, jlong base_type_h, jlongArray indices_h,
+  jstring name, jboolean inBounds
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* b = as_pointer<llvm::Value>(base_h);
+  auto* t = as_pointer<llvm::Type>(base_type_h);
+  return with_pointers<llvm::Value>(e, indices_h, [=](auto is) {
+    return with_utf8(e, name, [=](auto n) {
+      return as_handle(self->CreateGEP(t, b, is, n, inBounds));
+    });
+  });
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeLoad(
+  JNIEnv* e, jobject, jlong sh, jlong source_h, jlong source_type_h,
+  jboolean is_volatile, jstring name
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* s = as_pointer<llvm::Value>(source_h);
+  auto* t = as_pointer<llvm::Type>(source_type_h);
+  return with_utf8(e, name, [=](auto n) {
+    return as_handle(self->CreateLoad(t, s, is_volatile, n));
+  });
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeReturn(
+  JNIEnv*, jobject, jlong sh, jlong value_h
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* v = as_nullable_pointer<llvm::Value>(value_h);
+  if (v == nullptr) {
+    return as_handle(self->CreateRetVoid());
+  } else {
+    return as_handle(self->CreateRet(v));
+  }
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeStore(
+  JNIEnv* e, jobject, jlong sh, jlong value_h, jlong target_h, jboolean is_volatile
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* v = as_nullable_pointer<llvm::Value>(value_h);
+  auto* t = as_nullable_pointer<llvm::Value>(target_h);
+  return as_handle(self->CreateStore(v, t, is_volatile));
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeStructGEP(
+  JNIEnv* e, jobject, jlong sh, jlong base_h, jlong base_type_h, jint index, jstring name
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* b = as_pointer<llvm::Value>(base_h);
+  auto* t = as_pointer<llvm::Type>(base_type_h);
+  return with_utf8(e, name, [=](auto n) {
+    return as_handle(self->CreateStructGEP(t, b, index, n));
+  });
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeSwitch(
+  JNIEnv* e, jobject, jlong sh, jlong condition_h, jlong default_h,
+  jlongArray patterns_h, jlongArray destinations_h
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* c = as_pointer<llvm::Value>(condition_h);
+  auto* d = as_pointer<llvm::BasicBlock>(default_h);
+  return with_pointers<llvm::ConstantInt>(e, patterns_h, [=](auto ps) {
+    return with_pointers<llvm::BasicBlock>(e, destinations_h, [=](auto ds) {
+      auto* s = self->CreateSwitch(c, d, ps.size());
+      for (int i = 0; i < ps.size(); ++i) {
+        s->addCase(ps[i], ds[i]);
+      }
+      return as_handle(s);
+    });
+  });
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeTruncTo(
+  JNIEnv* e, jobject, jlong sh, jlong source_h, jlong target_h, jstring name
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  auto* s = as_pointer<llvm::Value>(source_h);
+  auto* t = as_pointer<llvm::Type>(target_h);
+  return with_utf8(e, name, [=](auto n) {
+    return as_handle(self->CreateTrunc(s, t, n));
+  });
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeUnreachable(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::IRBuilderBase>(sh);
+  return as_handle(self->CreateUnreachable());
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ModuleCreateWithNameInContext(
@@ -484,6 +603,34 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BasicBlockGetParent(
   return as_handle(self->getParent());
 }
 
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_BranchIsConditional(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::BranchInst>(sh);
+  return self->isConditional();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BranchGetCondition(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::BranchInst>(sh);
+  return self->isConditional() ? as_handle(self->getCondition()) : 0;
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BranchFromValue(
+  JNIEnv*, jobject, jlong source_h
+) {
+  auto* source = as_pointer<llvm::Value>(source_h);
+  return as_nullable_handle(llvm::dyn_cast<llvm::BranchInst>(source));
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BranchSuccessorAt(
+  JNIEnv*, jobject, jlong sh, jint p
+) {
+  auto* self = as_pointer<llvm::BranchInst>(sh);
+  return as_handle(self->getSuccessor(p));
+}
+
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantAggregateMemberAt(
   JNIEnv*, jobject, jlong sh, jint p
 ) {
@@ -577,6 +724,69 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantUndefined(
 ) {
   auto* t = as_pointer<llvm::Type>(type_h);
   return as_handle(llvm::UndefValue::get(t));
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StoreGetAlignment(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::StoreInst>(sh);
+  return self->getAlign().value();
+}
+
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StoreIsVolatile(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::StoreInst>(sh);
+  return self->isVolatile();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StoreFromValue(
+  JNIEnv*, jobject, jlong source_h
+) {
+  auto* source = as_pointer<llvm::Value>(source_h);
+  return as_nullable_handle(llvm::dyn_cast<llvm::StoreInst>(source));
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_StoreSetAlignment(
+  JNIEnv *, jobject, jlong sh, jlong a
+) {
+  auto* self = as_pointer<llvm::StoreInst>(sh);
+  self->setAlignment(llvm::Align(a));
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_SwitchGetCondition(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::SwitchInst>(sh);
+  return as_handle(self->getCondition());
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_SwitchGetDefaultDestination(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::SwitchInst>(sh);
+  return as_handle(self->getDefaultDest());
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_SwitchFromValue(
+  JNIEnv*, jobject, jlong source_h
+) {
+  auto* source = as_pointer<llvm::Value>(source_h);
+  return as_nullable_handle(llvm::dyn_cast<llvm::SwitchInst>(source));
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_SwitchSuccessorAt(
+  JNIEnv*, jobject, jlong sh, jint p
+) {
+  auto* self = as_pointer<llvm::SwitchInst>(sh);
+  return as_handle(self->getSuccessor(p));
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_SwitchSuccessorCount(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::SwitchInst>(sh);
+  return self->getNumSuccessors();
 }
 
 /// Creates a function in a module using `llvm::Function::Create`.

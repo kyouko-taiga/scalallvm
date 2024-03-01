@@ -81,11 +81,99 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderDispose
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderGetInsertionBlock
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderGetInsertionBlock
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     InstructionBuilderMakeAlloca
  * Signature:  (JJIJLjava/lang/String;)J
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeAlloca
   (JNIEnv *, jobject, jlong, jlong, jint, jlong, jstring);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeBr
+ * Signature:  (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeBr
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeConditionalBr
+ * Signature:  (JJJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeConditionalBr
+  (JNIEnv *, jobject, jlong, jlong, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeGEP
+ * Signature:  (JJJ[JLjava/lang/String;Z)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeGEP
+  (JNIEnv *, jobject, jlong, jlong, jlong, jlongArray, jstring, jboolean);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeLoad
+ * Signature:  (JJJZLjava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeLoad
+  (JNIEnv *, jobject, jlong, jlong, jlong, jboolean, jstring);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeReturn
+ * Signature:  (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeReturn
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeStore
+ * Signature:  (JJJZ)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeStore
+  (JNIEnv *, jobject, jlong, jlong, jlong, jboolean);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeStructGEP
+ * Signature:  (JJJILjava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeStructGEP
+  (JNIEnv *, jobject, jlong, jlong, jlong, jint, jstring);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeSwitch
+ * Signature:  (JJJ[J[J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeSwitch
+  (JNIEnv *, jobject, jlong, jlong, jlong, jlongArray, jlongArray);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeTruncTo
+ * Signature:  (JJJLjava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeTruncTo
+  (JNIEnv *, jobject, jlong, jlong, jlong, jstring);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InstructionBuilderMakeUnreachable
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderMakeUnreachable
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:      scalallvm_LLVM_00024
@@ -441,6 +529,38 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BasicBlockGetParent
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     BranchIsConditional
+ * Signature:  (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_BranchIsConditional
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     BranchGetCondition
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BranchGetCondition
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     BranchFromValue
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BranchFromValue
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     BranchSuccessorAt
+ * Signature:  (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BranchSuccessorAt
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ConstantAggregateMemberAt
  * Signature:  (JI)J
  */
@@ -533,6 +653,78 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantStruct
  * Signature:  (J)J
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ConstantUndefined
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StoreGetAlignment
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StoreGetAlignment
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StoreIsVolatile
+ * Signature:  (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_StoreIsVolatile
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StoreFromValue
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_StoreFromValue
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     StoreSetAlignment
+ * Signature:  (JJ)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_StoreSetAlignment
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     SwitchGetCondition
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_SwitchGetCondition
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     SwitchGetDefaultDestination
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_SwitchGetDefaultDestination
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     SwitchFromValue
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_SwitchFromValue
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     SwitchSuccessorAt
+ * Signature:  (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_SwitchSuccessorAt
+  (JNIEnv *, jobject, jlong, jint);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     SwitchSuccessorCount
+ * Signature:  (J)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_SwitchSuccessorCount
   (JNIEnv *, jobject, jlong);
 
 /*

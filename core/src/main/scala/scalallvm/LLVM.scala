@@ -32,9 +32,47 @@ object LLVM {
 
   @native def InstructionBuilderDispose(self: Handle): Unit
 
+  @native def InstructionBuilderGetInsertionBlock(self: Handle): Handle
+
   @native def InstructionBuilderMakeAlloca(
-    self: Handle, tpe: Handle, space: Int, size: Handle, name: String
+      self: Handle, tpe: Handle, space: Int, size: Handle, name: String
   ): Handle
+
+  @native def InstructionBuilderMakeBr(self: Handle, destination: Handle): Handle
+
+  @native def InstructionBuilderMakeConditionalBr(
+      self: Handle, condition: Handle, success: Handle, failure: Handle
+  ): Handle
+
+  @native def InstructionBuilderMakeGEP(
+      self: Handle, base: Handle, baseType: Handle, indices: Array[Handle],
+      name: String, inBounds: Boolean
+  ): Handle
+
+  @native def InstructionBuilderMakeLoad(
+      self: Handle, source: Handle, sourceType: Handle, isVolatile: Boolean, name: String
+  ): Handle
+
+  @native def InstructionBuilderMakeReturn(self: Handle, value: Handle): Handle
+
+  @native def InstructionBuilderMakeStore(
+      self: Handle, value: Handle, target: Handle, isVolatile: Boolean
+  ): Handle
+
+  @native def InstructionBuilderMakeStructGEP(
+      self: Handle, base: Handle, baseType: Handle, index: Int, name: String
+  ): Handle
+
+  @native def InstructionBuilderMakeSwitch(
+      self: Handle, condition: Handle, default: Handle,
+      patterns: Array[Handle], destinations: Array[Handle]
+  ): Handle
+
+  @native def InstructionBuilderMakeTruncTo(
+      self: Handle, source: Handle, target: Handle, name: String
+  ): Handle
+
+  @native def InstructionBuilderMakeUnreachable(self: Handle): Handle
 
   @native def InstructionBuilderPositionAtEndOfBlock(self: Handle, block: Handle): Unit
 
@@ -132,6 +170,14 @@ object LLVM {
 
   @native def BasicBlockGetParent(self: Handle): Handle
 
+  @native def BranchIsConditional(self: Handle): Boolean
+
+  @native def BranchGetCondition(self: Handle): Handle
+
+  @native def BranchFromValue(source: Handle): Handle
+
+  @native def BranchSuccessorAt(self: Handle, position: Int): Handle
+
   @native def ConstantAggregateMemberAt(self: Handle, position: Int): Handle
 
   @native def ConstantArray(element: Handle, members: Array[Handle]): Handle
@@ -158,6 +204,24 @@ object LLVM {
   @native def ConstantStruct(tpe: Handle, members: Array[Handle]): Handle
 
   @native def ConstantUndefined(tpe: Handle): Handle
+
+  @native def StoreGetAlignment(self: Handle): Long
+
+  @native def StoreIsVolatile(self: Handle): Boolean
+
+  @native def StoreFromValue(source: Handle): Handle
+
+  @native def StoreSetAlignment(self: Handle, a: Long): Unit
+
+  @native def SwitchGetCondition(self: Handle): Handle
+
+  @native def SwitchGetDefaultDestination(self: Handle): Handle
+
+  @native def SwitchFromValue(source: Handle): Handle
+
+  @native def SwitchSuccessorAt(self: Handle, position: Int): Handle
+
+  @native def SwitchSuccessorCount(self: Handle): Int
 
   // --- Functions ------------------------------------------------------------
 
