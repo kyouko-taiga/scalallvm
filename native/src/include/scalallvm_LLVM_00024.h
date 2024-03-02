@@ -25,6 +25,86 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ContextDispose
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutABIAlignment
+ * Signature:  (JJ)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutABIAlignment
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutBitWidth
+ * Signature:  (JJ)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutBitWidth
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutDescription
+ * Signature:  (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_DataLayoutDescription
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutFromTargetMachine
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_DataLayoutFromTargetMachine
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutHasPaddingBits
+ * Signature:  (JJ)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_DataLayoutHasPaddingBits
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutIndexOfElementContaining
+ * Signature:  (JIJ)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutIndexOfElementContaining
+  (JNIEnv *, jobject, jlong, jint, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutIsDefault
+ * Signature:  (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_DataLayoutIsDefault
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutOffsetOfElement
+ * Signature:  (JIJ)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutOffsetOfElement
+  (JNIEnv *, jobject, jlong, jint, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutPreferredAlignment
+ * Signature:  (JJ)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutPreferredAlignment
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutStorgeSize
+ * Signature:  (JJ)I
+ */
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutStorgeSize
+  (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ModuleCreateWithNameInContext
  * Signature:  (Ljava/lang/String;J)J
  */
@@ -41,10 +121,26 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleDescription
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     ModuleGetDataLyout
+ * Signature:  (J)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ModuleGetDataLyout
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     ModuleGetName
  * Signature:  (J)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleGetName
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ModuleGetTriple
+ * Signature:  (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleGetTriple
   (JNIEnv *, jobject, jlong);
 
 /*
@@ -61,6 +157,14 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleDispose
  * Signature:  (JLjava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName
+  (JNIEnv *, jobject, jlong, jstring);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ModuleSetTriple
+ * Signature:  (JLjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetTriple
   (JNIEnv *, jobject, jlong, jstring);
 
 /*
@@ -838,6 +942,70 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_FunctionVerifiy
  */
 JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_LinkageExternal
   (JNIEnv *, jobject);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DefaultTargetTriple
+ * Signature:  ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_DefaultTargetTriple
+  (JNIEnv *, jobject);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     InitializeTargets
+ * Signature:  ()V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_InitializeTargets
+  (JNIEnv *, jobject);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     DataLayoutDispose
+ * Signature:  (J)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_DataLayoutDispose
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     TargetGetName
+ * Signature:  (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TargetGetName
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     TargetFromTriple
+ * Signature:  (Ljava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetFromTriple
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     TargetMachineCreate
+ * Signature:  (JLjava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetMachineCreate
+  (JNIEnv *, jobject, jlong, jstring);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     TargetMachineDispose
+ * Signature:  (J)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_TargetMachineDispose
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     ConsumeError
+ * Signature:  (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ConsumeError
+  (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus
 }

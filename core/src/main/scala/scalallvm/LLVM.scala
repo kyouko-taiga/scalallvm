@@ -14,17 +14,45 @@ object LLVM {
 
   @native def ContextDispose(self: Handle): Unit
 
+  // --- DataLayout -----------------------------------------------------------
+
+  @native def DataLayoutABIAlignment(self: Handle, tpe: Handle): Int
+
+  @native def DataLayoutBitWidth(self: Handle, tpe: Handle): Int
+
+  @native def DataLayoutDescription(self: Handle): String
+
+  @native def DataLayoutFromTargetMachine(target: Handle): Handle
+
+  @native def DataLayoutHasPaddingBits(self: Handle, tpe: Handle): Boolean
+
+  @native def DataLayoutIndexOfElementContaining(self: Handle, offset: Int, tpe: Handle): Int
+
+  @native def DataLayoutIsDefault(self: Handle): Boolean
+
+  @native def DataLayoutOffsetOfElement(self: Handle, index: Int, tpe: Handle): Int
+
+  @native def DataLayoutPreferredAlignment(self: Handle, tpe: Handle): Int
+
+  @native def DataLayoutStorgeSize(self: Handle, tpe: Handle): Int
+
   // --- Module ---------------------------------------------------------------
 
   @native def ModuleCreateWithNameInContext(name: String, context: Handle): Handle
 
   @native def ModuleDescription(self: Handle): String
 
+  @native def ModuleGetDataLyout(self: Handle): Handle
+
   @native def ModuleGetName(self: Handle): String
+
+  @native def ModuleGetTriple(self: Handle): String
 
   @native def ModuleDispose(self: Handle): Unit
 
   @native def ModuleSetName(self: Handle, name: String): Unit
+
+  @native def ModuleSetTriple(self: Handle, triple: String): Unit
 
   // --- IRBuilder ------------------------------------------------------------
 
@@ -255,6 +283,24 @@ object LLVM {
 
   @native def LinkageExternal(): Byte
 
+  // --- Initialization -------------------------------------------------------
+
+  @native def DefaultTargetTriple(): String
+
+  @native def InitializeTargets(): Unit
+
   // --- Support --------------------------------------------------------------
+
+  @native def DataLayoutDispose(self: Handle): Unit
+
+  @native def TargetGetName(self: Handle): String
+
+  @native def TargetFromTriple(triple: String): Handle
+
+  @native def TargetMachineCreate(target: Handle, triple: String): Handle
+
+  @native def TargetMachineDispose(self: Handle): Unit
+
+  @native def ConsumeError(self: Handle): String
 
 }

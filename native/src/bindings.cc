@@ -1,17 +1,25 @@
 #include <concepts>
+#include <variant>
+
+#include <iostream>
 
 #include <llvm/ADT/APInt.h>
 #include <llvm/IR/Constants.h>
+#include <llvm/IR/DataLayout.h>
 #include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
 #include <llvm/IR/Verifier.h>
+#include <llvm/MC/TargetRegistry.h>
+#include <llvm/Target/TargetMachine.h>
+#include <llvm/Support/Host.h>
 #include <llvm/Support/raw_ostream.h>
+#include <llvm/Support/TargetSelect.h>
 
 #include "scalallvm_LLVM_00024.h"
 
 /// Converts `p` into a Java handle.
-jlong as_handle(void* p) {
+jlong as_handle(const void* p) {
   return reinterpret_cast<uintptr_t>(p);
 }
 
@@ -88,6 +96,83 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ContextDispose(
   JNIEnv*, jobject, jlong sh
 ) {
   delete as_pointer<llvm::LLVMContext>(sh);
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutABIAlignment(
+  JNIEnv*, jobject, jlong sh, jlong type_h
+) {
+  auto* self = as_pointer<llvm::DataLayout>(sh);
+  auto* type = as_pointer<llvm::Type>(type_h);
+  return self->getABITypeAlign(type).value();
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutBitWidth(
+  JNIEnv*, jobject, jlong sh, jlong type_h
+) {
+  auto* self = as_pointer<llvm::DataLayout>(sh);
+  auto* type = as_pointer<llvm::Type>(type_h);
+  return self->getTypeSizeInBits(type);
+}
+
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_DataLayoutDescription(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::DataLayout>(sh);
+  return e->NewStringUTF(self->getStringRepresentation().c_str());
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_DataLayoutFromTargetMachine(
+  JNIEnv*, jobject, jlong machine_h
+) {
+  auto* machine = as_pointer<llvm::TargetMachine>(machine_h);
+  return as_handle(new llvm::DataLayout(machine->createDataLayout()));
+}
+
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_DataLayoutHasPaddingBits(
+  JNIEnv*, jobject, jlong sh, jlong type_h
+) {
+  auto* self = as_pointer<llvm::DataLayout>(sh);
+  auto* type = as_pointer<llvm::StructType>(type_h);
+  return self->getStructLayout(type)->hasPadding();
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutIndexOfElementContaining(
+  JNIEnv*, jobject, jlong sh, jint offset, jlong type_h
+) {
+  auto* self = as_pointer<llvm::DataLayout>(sh);
+  auto* type = as_pointer<llvm::StructType>(type_h);
+  return self->getStructLayout(type)->getElementContainingOffset(offset);
+}
+
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_DataLayoutIsDefault(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::DataLayout>(sh);
+  return self->isDefault();
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutOffsetOfElement(
+  JNIEnv*, jobject, jlong sh, jint index, jlong type_h
+) {
+  auto* self = as_pointer<llvm::DataLayout>(sh);
+  auto* type = as_pointer<llvm::StructType>(type_h);
+  return self->getStructLayout(type)->getElementOffset(index);
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutPreferredAlignment(
+  JNIEnv*, jobject, jlong sh, jlong type_h
+) {
+  auto* self = as_pointer<llvm::DataLayout>(sh);
+  auto* type = as_pointer<llvm::Type>(type_h);
+  return self->getPrefTypeAlign(type).value();
+}
+
+JNIEXPORT jint JNICALL Java_scalallvm_LLVM_00024_DataLayoutStorgeSize(
+  JNIEnv*, jobject, jlong sh, jlong type_h
+) {
+  auto* self = as_pointer<llvm::DataLayout>(sh);
+  auto* type = as_pointer<llvm::Type>(type_h);
+  return self->getTypeStoreSize(type);
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_InstructionBuilderGetInsertionBlock(
@@ -246,6 +331,23 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleGetName(
   return e->NewStringUTF(self->getModuleIdentifier().c_str());
 }
 
+/// Returns a pointer to the data layout of the module's target.
+///
+/// The lifetime of the returned value is bound to that of the module.
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_ModuleGetDataLyout(
+  JNIEnv *, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Module>(sh);
+  return as_handle(&(self->getDataLayout()));
+}
+
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ModuleGetTriple(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Module>(sh);
+  return e->NewStringUTF(self->getTargetTriple().c_str());
+}
+
 JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleDispose(
   JNIEnv*, jobject, jlong sh
 ) {
@@ -258,6 +360,16 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetName(
   auto* self = as_pointer<llvm::Module>(sh);
   with_utf8(e, name, [=](auto n) {
     self->setModuleIdentifier(n);
+    return std::monostate{};
+  });
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_ModuleSetTriple(
+  JNIEnv* e, jobject, jlong sh, jstring triple
+) {
+  auto* self = as_pointer<llvm::Module>(sh);
+  with_utf8(e, triple, [=](auto t) {
+    self->setTargetTriple(t);
     return std::monostate{};
   });
 }
@@ -912,4 +1024,79 @@ JNIEXPORT jbyte JNICALL Java_scalallvm_LLVM_00024_LinkageExternal(
   JNIEnv*, jobject
 ) {
   return llvm::GlobalValue::LinkageTypes::ExternalLinkage;
+}
+
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_DefaultTargetTriple(
+  JNIEnv* e, jobject
+) {
+  return e->NewStringUTF(llvm::sys::getDefaultTargetTriple().c_str());
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_InitializeTargets(
+  JNIEnv*, jobject
+) {
+  llvm::InitializeAllTargetInfos();
+  llvm::InitializeAllTargets();
+  llvm::InitializeAllTargetMCs();
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_DataLayoutDispose(
+  JNIEnv*, jobject, jlong sh
+) {
+  delete as_pointer<llvm::DataLayout>(sh);
+}
+
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TargetGetName(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<llvm::Target>(sh);
+  return e->NewStringUTF(self->getName());
+}
+
+/// Returns a target from its triple.
+///
+/// On failure, the return value is a pointer to the target corresponding to the given triple. On
+/// failure, it is a pointer to a string describing the error, tagged on its least significant bit.
+/// Use `ConsumeError` to read that description from Java and dispose of memory allocated in C++.
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetFromTriple(
+  JNIEnv* e, jobject, jstring triple
+) {
+  return with_utf8(e, triple, [=](auto utf8) {
+    std::string e;
+    std::string s = utf8;
+
+    auto* t = llvm::TargetRegistry::lookupTarget(s, e);
+    if (!t) {
+      auto* diagnostic = new std::string(e);
+      return (jlong)(reinterpret_cast<uintptr_t>(diagnostic) | 1);
+    } else {
+      return as_handle(t);
+    }
+  });
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetMachineCreate(
+  JNIEnv* e, jobject, jlong target_h, jstring triple
+) {
+  auto* target = as_pointer<llvm::Target>(target_h);
+  return with_utf8(e, triple, [=](auto utf8) {
+    std::string s = utf8;
+    llvm::TargetOptions p;
+    return as_handle(target->createTargetMachine(s, "", "", p, llvm::Reloc::PIC_));
+  });
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_TargetMachineDispose(
+  JNIEnv*, jobject, jlong sh
+) {
+  delete as_pointer<llvm::TargetMachine>(sh);
+}
+
+JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ConsumeError(
+  JNIEnv* e, jobject, jlong error_h
+) {
+  auto* error = as_pointer<std::string>(error_h & ~1);
+  auto r = e->NewStringUTF(error->c_str());
+  delete error;
+  return r;
 }

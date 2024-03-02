@@ -18,9 +18,27 @@ final class Module private (val handle: LLVM.Handle) extends LLVMObject with Dis
   def name_=(n: String): Unit =
     LLVM.ModuleSetName(handle, n)
 
+  /** The triple identifying the target on which the module is compiled. */
+  def triple: String =
+    LLVM.ModuleGetTriple(handle)
+
+  /** Sets the triple identifying the target on which the module is compiled. */
+  def triple_=(t: String): Unit =
+    LLVM.ModuleSetTriple(handle, t)
+
   /** A textual description of this module's IR. */
   def description: String =
     LLVM.ModuleDescription(handle)
+
+  /** Returns the result of calling `action` on the data layout of the module's target.
+   *
+   *  The argument to `action` is only valid for the duration of `action`'s call. It is undefined
+   *  behavior to let it escape in any way. Further, `this.dataLayout` cannot be modified for the
+   *  duration of `action`'s call.
+   */
+  def withDataLayout[R](action: DataLayout => R): R = {
+    action(new DataLayout(LLVM.ModuleGetDataLyout(handle)))
+  }
 
   /** Returns a function named `n` and having type `t`, declaring it if it doesn't exist. */
   def declareFunction(
