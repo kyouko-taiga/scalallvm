@@ -68,7 +68,7 @@ object Module {
 
   /** Returns the result of calling `action` with a new module named `n`, in a new context.
    *
-   *  The arguments to `action` are only valid for the duration of action's `call`. It is undefined
+   *  The arguments to `action` are only valid for the duration of `action`'s call. It is undefined
    *  behavior to let them escape in any way.
    */
   def withNew[R](n: String)(action: (Context, Module) => R): R =
