@@ -289,6 +289,18 @@ object LLVM {
 
   @native def InitializeTargets(): Unit
 
+  // --- Streams --------------------------------------------------------------
+
+  @native def BufferOutputStreamCreate(): Handle
+
+  @native def BufferOutputStreamDispose(self: Handle): Unit
+
+  @native def BufferOutputStreamGetContents(self: Handle): Array[Byte]
+
+  @native def FileOutputStreamCreate(filename: String): Handle
+
+  @native def FileOutputStreamDispose(self: Handle): Unit
+
   // --- Support --------------------------------------------------------------
 
   @native def DataLayoutDispose(self: Handle): Unit
@@ -303,6 +315,10 @@ object LLVM {
   ): Handle
 
   @native def TargetMachineDispose(self: Handle): Unit
+
+  @native def TargetMachineEmit(
+      self: Handle, module: Handle, artifact: Byte, output: Handle
+  ): Boolean
 
   @native def ConsumeError(self: Handle): String
 

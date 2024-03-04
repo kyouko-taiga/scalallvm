@@ -2,6 +2,7 @@
 #include <variant>
 
 #include <iostream>
+#include <utility>
 
 #include <llvm/ADT/APInt.h>
 #include <llvm/IR/Constants.h>
@@ -16,8 +17,15 @@
 #include <llvm/Support/raw_ostream.h>
 #include <llvm/Support/TargetSelect.h>
 
+#include <llvm/IR/LegacyPassManager.h>
+#include <llvm/Support/FileSystem.h>
+
 #include "scalallvm_CodeGeneration.hh"
+#include "scalallvm_TaggedPointer.hh"
 #include "scalallvm_LLVM_00024.h"
+
+using BufferOutputStreamWrapper =
+  scalallvm::TaggedPointer<llvm::raw_svector_ostream, llvm::SmallString<0>>;
 
 /// Converts `p` into a Java handle.
 jlong as_handle(const void* p) {
@@ -1044,6 +1052,57 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_InitializeTargets(
   llvm::InitializeAllTargetInfos();
   llvm::InitializeAllTargets();
   llvm::InitializeAllTargetMCs();
+  llvm::InitializeAllAsmParsers();
+  llvm::InitializeAllAsmPrinters();
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BufferOutputStreamCreate(
+  JNIEnv*, jobject
+) {
+  auto* p = BufferOutputStreamWrapper::pointer(llvm::SmallString<0>(), [](auto* v) {
+    return llvm::raw_svector_ostream(*v);
+  });
+  return as_handle(p);
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_BufferOutputStreamDispose(
+  JNIEnv*, jobject, jlong sh
+) {
+  auto* self = as_pointer<BufferOutputStreamWrapper::data_t>(sh);
+  BufferOutputStreamWrapper::free(self);
+}
+
+JNIEXPORT jbyteArray JNICALL Java_scalallvm_LLVM_00024_BufferOutputStreamGetContents(
+  JNIEnv* e, jobject, jlong sh
+) {
+  auto* self = as_pointer<BufferOutputStreamWrapper::data_t>(sh);
+  auto data = self->str();
+  auto* bytes = static_cast<const jbyte*>(static_cast<const void*>(data.bytes_begin()));
+
+  jbyteArray result = e->NewByteArray(data.size());
+  for (std::size_t i = 0; i < data.size(); i += 256) {
+    e->SetByteArrayRegion(result, i, std::min(i + 256, data.size()), bytes);
+  }
+  return result;
+}
+
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FileOutputStreamCreate(
+  JNIEnv* e, jobject, jstring filename
+) {
+  std::error_code ec;
+  auto* os = new llvm::raw_fd_ostream(copy_utf8(e, filename), ec, llvm::sys::fs::OF_None);
+  if (ec) {
+    auto* diagnostic = new std::string(ec.message());
+    return (jlong)(reinterpret_cast<uintptr_t>(diagnostic) | 1);
+  } else {
+    return as_handle(os);
+  }
+}
+
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_FileOutputStreamDispose(
+  JNIEnv*, jobject, jlong sh
+) {
+  delete as_pointer<llvm::raw_fd_ostream>(sh);
 }
 
 JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_DataLayoutDispose(
@@ -1061,7 +1120,7 @@ JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_TargetGetName(
 
 /// Returns a target from its triple.
 ///
-/// On failure, the return value is a pointer to the target corresponding to the given triple. On
+/// On success, the return value is a pointer to the target corresponding to the given triple. On
 /// failure, it is a pointer to a string describing the error, tagged on its least significant bit.
 /// Use `ConsumeError` to read that description from Java and dispose of memory allocated in C++.
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetFromTriple(
@@ -1103,6 +1162,30 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_TargetMachineDispose(
   JNIEnv*, jobject, jlong sh
 ) {
   delete as_pointer<llvm::TargetMachine>(sh);
+}
+
+/// Writes the given module as assembly or machine code to an output stream, returning `false` iff
+/// emission is not supported.
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_TargetMachineEmit(
+  JNIEnv*, jobject, jlong sh, jlong module_h, jbyte artifact, jlong output_h
+) {
+  auto* self = as_pointer<llvm::TargetMachine>(sh);
+  auto* os = as_pointer<llvm::raw_pwrite_stream>(output_h);
+
+  auto* m = as_pointer<llvm::Module>(module_h);
+  m->setTargetTriple(llvm::sys::getDefaultTargetTriple());
+  m->setDataLayout(self->createDataLayout());
+
+  auto ft = scalallvm::decode_codegen_file_type(artifact);
+
+  llvm::legacy::PassManager pm;
+  if (self->addPassesToEmitFile(pm, *os, nullptr, ft)) {
+    return false;
+  }
+
+  pm.run(*m);
+  os->flush();
+  return true;
 }
 
 JNIEXPORT jstring JNICALL Java_scalallvm_LLVM_00024_ConsumeError(

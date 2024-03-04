@@ -961,6 +961,46 @@ JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_InitializeTargets
 
 /*
  * Class:      scalallvm_LLVM_00024
+ * Method:     BufferOutputStreamCreate
+ * Signature:  ()J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_BufferOutputStreamCreate
+  (JNIEnv *, jobject);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     BufferOutputStreamDispose
+ * Signature:  (J)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_BufferOutputStreamDispose
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     BufferOutputStreamGetContents
+ * Signature:  (J)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_scalallvm_LLVM_00024_BufferOutputStreamGetContents
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FileOutputStreamCreate
+ * Signature:  (Ljava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_FileOutputStreamCreate
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     FileOutputStreamDispose
+ * Signature:  (J)V
+ */
+JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_FileOutputStreamDispose
+  (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
  * Method:     DataLayoutDispose
  * Signature:  (J)V
  */
@@ -998,6 +1038,14 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetMachineCreate
  */
 JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_TargetMachineDispose
   (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:      scalallvm_LLVM_00024
+ * Method:     TargetMachineEmit
+ * Signature:  (JJBJ)Z
+ */
+JNIEXPORT jboolean JNICALL Java_scalallvm_LLVM_00024_TargetMachineEmit
+  (JNIEnv *, jobject, jlong, jlong, jbyte, jlong);
 
 /*
  * Class:      scalallvm_LLVM_00024

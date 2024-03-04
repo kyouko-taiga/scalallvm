@@ -43,7 +43,14 @@ inline llvm::Optional<llvm::Reloc::Model> decode_relocation_model(uint8_t m) {
   }
 }
 
-/// Converts
+/// Converts a code generation artifact kind from Scala LLVM to LLVM.
+inline llvm::CodeGenFileType decode_codegen_file_type(uint8_t m) {
+  switch (m) {
+    case 0: return llvm::CodeGenFileType::CGFT_AssemblyFile;
+    case 1: return llvm::CodeGenFileType::CGFT_ObjectFile;
+    default: llvm_unreachable("unexpected codegen file type");
+  }
+}
 
 }
 

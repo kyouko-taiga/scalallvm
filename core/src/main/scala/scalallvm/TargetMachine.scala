@@ -13,6 +13,10 @@ final class TargetMachine private (val handle: LLVM.Handle) extends LLVMObject w
     try action(l) finally l.dispose()
   }
 
+  /** Writes the code of `m` as an artifact of kind `k` to the output stream `o`. */
+  def emit(m: Module, k: CodeGenerationKind, o: support.streams.OutputStream): Unit =
+    LLVM.TargetMachineEmit(handle, m.handle, k.rawValue, o.handle)
+
   def dispose(): Unit =
     LLVM.TargetMachineDispose(handle)
 
