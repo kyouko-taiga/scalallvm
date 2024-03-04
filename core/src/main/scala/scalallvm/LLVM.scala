@@ -297,7 +297,10 @@ object LLVM {
 
   @native def TargetFromTriple(triple: String): Handle
 
-  @native def TargetMachineCreate(target: Handle, triple: String): Handle
+  @native def TargetMachineCreate(
+      target: Handle, triple: String, cpu: String, features: String,
+      optimization: Byte, relocationModel: Byte, codeModel: Byte
+  ): Handle
 
   @native def TargetMachineDispose(self: Handle): Unit
 

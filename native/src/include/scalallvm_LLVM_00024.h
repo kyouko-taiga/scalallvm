@@ -986,10 +986,10 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetFromTriple
 /*
  * Class:      scalallvm_LLVM_00024
  * Method:     TargetMachineCreate
- * Signature:  (JLjava/lang/String;)J
+ * Signature:  (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;BBB)J
  */
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetMachineCreate
-  (JNIEnv *, jobject, jlong, jstring);
+  (JNIEnv *, jobject, jlong, jstring, jstring, jstring, jbyte, jbyte, jbyte);
 
 /*
  * Class:      scalallvm_LLVM_00024

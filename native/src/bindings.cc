@@ -16,6 +16,7 @@
 #include <llvm/Support/raw_ostream.h>
 #include <llvm/Support/TargetSelect.h>
 
+#include "scalallvm_CodeGeneration.hh"
 #include "scalallvm_LLVM_00024.h"
 
 /// Converts `p` into a Java handle.
@@ -62,6 +63,11 @@ auto with_utf8(JNIEnv* e, jstring s, F&& action) {
   auto result = action(n);
   e->ReleaseStringUTFChars(s, n);
   return result;
+}
+
+/// Returns a copy of `s`.
+std::string copy_utf8(JNIEnv* e, jstring s) {
+  return with_utf8(e, s, [=](auto contents) { return std::string(contents); });
 }
 
 /// Constructs a llvm::APInt with the given properties.
@@ -1076,14 +1082,21 @@ JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetFromTriple(
 }
 
 JNIEXPORT jlong JNICALL Java_scalallvm_LLVM_00024_TargetMachineCreate(
-  JNIEnv* e, jobject, jlong target_h, jstring triple
+  JNIEnv* e, jobject, jlong target_h, jstring triple, jstring cpu, jstring features,
+  jbyte optimization, jbyte relocationModel, jbyte codeModel
 ) {
+  llvm::TargetOptions to;
+  auto tt = copy_utf8(e, triple);
+  auto cc = copy_utf8(e, cpu);
+  auto fs = copy_utf8(e, features);
+  auto rm = scalallvm::decode_relocation_model(relocationModel);
+  auto cm = scalallvm::decode_code_model(codeModel);
+
   auto* target = as_pointer<llvm::Target>(target_h);
-  return with_utf8(e, triple, [=](auto utf8) {
-    std::string s = utf8;
-    llvm::TargetOptions p;
-    return as_handle(target->createTargetMachine(s, "", "", p, llvm::Reloc::PIC_));
-  });
+  auto* machine = target->createTargetMachine(tt, cc, fs, to, rm, cm);
+
+  machine->setOptLevel(scalallvm::decode_codegen_optimization_level(optimization));
+  return as_handle(machine);
 }
 
 JNIEXPORT void JNICALL Java_scalallvm_LLVM_00024_TargetMachineDispose(
